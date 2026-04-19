@@ -24,9 +24,6 @@ body {
 
 .mesa-ocupada { background: #ff9800 !important; color: white !important; border-color: #e68a00 !important; }
 
-/* AJUSTE DO BOTÃO CONFERIR (VERDE) */
-.btn-fechar { flex: 2; background: #28a745 !important; color: white; border: none; border-radius: 10px; padding: 15px; font-weight: bold; }
-
 #area-pedido {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none;
@@ -58,26 +55,38 @@ body {
 
 .total-container { background: #e9ecef; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
 
-.acoes { 
-    display: flex; 
-    gap: 10px; 
-}
+.acoes { display: flex; gap: 10px; }
 
 .btn-fechar { 
-    flex: 2; 
-    background: #28a745; 
-    color: white; 
-    border: none; 
-    border-radius: 10px; 
-    padding: 15px; 
-    font-weight: bold; 
+    flex: 2; background: #28a745; color: white; border: none; 
+    border-radius: 10px; padding: 15px; font-weight: bold; 
 }
 
 .btn-voltar { 
-    flex: 1; 
-    background: #6c757d; 
-    color: white; 
-    border: none; 
-    border-radius: 10px; 
-    padding: 15px; 
+    flex: 1; background: #6c757d; color: white; border: none; 
+    border-radius: 10px; padding: 15px; 
+}
+
+/* ESTILO DA TELA DE CONFERÊNCIA */
+#tela-conferencia {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #ffffff; z-index: 10000; display: none;
+    flex-direction: column; align-items: center; padding: 20px;
+}
+
+.card-conferencia { width: 100%; max-width: 450px; text-align: center; }
+
+.conf-total-box {
+    background: #f8f9fa; padding: 20px; border-radius: 15px;
+    margin: 20px 0; border: 2px solid #28a745;
+}
+
+.btn-confirmar-final {
+    width: 100%; background: #28a745; color: white; border: none;
+    padding: 20px; border-radius: 12px; font-weight: bold; margin-bottom: 10px;
+}
+
+.btn-corrigir {
+    width: 100%; background: #6c757d; color: white; border: none;
+    padding: 15px; border-radius: 12px;
 }
