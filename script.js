@@ -45,24 +45,63 @@ function atualizarResumo() {
     let total = 0;
     lista.innerHTML = '';
     
-    contas[mesaAtual].forEach((item) => {
-        total += item.preco;
-        lista.innerHTML += `
-            <div class="item-linha">
+    if(contas[mesaAtual]) {
+        contas[mesaAtual].forEach((item) => {
+            total += item.preco;
+            lista.innerHTML += `
+                <div class="item-linha">
+                    <span>${item.nome}</span>
+                    <span>R$ ${item.preco.toFixed(2)}</span>
+                </div>`;
+        });
+    }
+    totalExibicao.innerText = total.toFixed(2);
+}
+
+// --- NOVAS FUNÇÕES PARA A TELA DE CONFERÊNCIA ---
+
+function abrirConferencia() {
+    let totalMesa = parseFloat(document.getElementById('total-mesa').innerText);
+    if (totalMesa <= 0) return alert("Não há itens na comanda!");
+
+    // Esconde a tela de pedido e mostra a tela cheia de conferência
+    document.getElementById('area-pedido').style.display = 'none';
+    document.getElementById('tela-conferencia').style.display = 'flex';
+    document.getElementById('tela-conferencia').classList.remove('hidden');
+    
+    document.getElementById('conf-titulo-mesa').innerText = `Resumo Mesa ${mesaAtual}`;
+    
+    const listaConf = document.getElementById('conf-lista-itens');
+    listaConf.innerHTML = '';
+    
+    contas[mesaAtual].forEach(item => {
+        listaConf.innerHTML += `
+            <div class="item-linha" style="font-size: 1.2rem; padding: 10px 0;">
                 <span>${item.nome}</span>
                 <span>R$ ${item.preco.toFixed(2)}</span>
             </div>`;
     });
-    totalExibicao.innerText = total.toFixed(2);
+    
+    document.getElementById('conf-valor-total').innerText = totalMesa.toFixed(2);
 }
 
-function finalizarConta() {
-    if (confirm(`Fechar conta da Mesa ${mesaAtual}?`)) {
+function voltarParaPedido() {
+    document.getElementById('tela-conferencia').style.display = 'none';
+    document.getElementById('tela-conferencia').classList.add('hidden');
+    document.getElementById('area-pedido').style.display = 'flex';
+}
+
+function confirmarFechamentoFinal() {
+    if (confirm(`Deseja realmente finalizar a Mesa ${mesaAtual} e limpar o pedido?`)) {
         contas[mesaAtual] = [];
         salvar();
-        voltar();
+        document.getElementById('tela-conferencia').style.display = 'none';
+        document.getElementById('tela-conferencia').classList.add('hidden');
+        voltar(); // Volta para o mapa de mesas
     }
 }
+
+// --- ---
 
 function voltar() {
     document.getElementById('area-pedido').style.display = 'none';
