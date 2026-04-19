@@ -17,7 +17,6 @@ function desenharMesas() {
     for (let i = 1; i <= 20; i++) {
         const btn = document.createElement('button');
         btn.innerText = `Mesa ${i}`;
-        // Adiciona cor laranja se a mesa tiver itens
         btn.className = 'btn-mesa ' + (contas[i] && contas[i].length > 0 ? 'mesa-ocupada' : '');
         btn.onclick = () => abrirMesa(i);
         container.appendChild(btn);
@@ -33,24 +32,19 @@ function abrirMesa(num) {
     atualizarResumo();
 }
 
-// NOVA LÓGICA: Agrupa itens repetidos
 function adicionarItem(nome, preco) {
     if (mesaAtual !== null) {
-        // Busca se o item já existe na comanda desta mesa
         const itemExistente = contas[mesaAtual].find(item => item.nome === nome);
-
         if (itemExistente) {
-            itemExistente.quantidade += 1; // Apenas aumenta o número
+            itemExistente.quantidade += 1;
         } else {
-            contas[mesaAtual].push({ nome, preco, quantidade: 1 }); // Adiciona novo
+            contas[mesaAtual].push({ nome, preco, quantidade: 1 });
         }
-        
         atualizarResumo();
         salvar();
     }
 }
 
-// EXIBIÇÃO: Mostra a quantidade (Ex: 2x Pizza)
 function atualizarResumo() {
     const lista = document.getElementById('lista-comanda');
     const totalExibicao = document.getElementById('total-mesa');
@@ -77,23 +71,36 @@ function atualizarResumo() {
     totalExibicao.innerText = total.toFixed(2);
 }
 
-// REMOÇÃO: Diminui 1 ou remove tudo se for o último
+// FUNÇÃO DE REMOVER COM PERGUNTA DE QUANTIDADE
 function removerItem(index) {
     const item = contas[mesaAtual][index];
     
-    if (item.quantidade > 1) {
-        if (confirm(`Remover 1 unidade de ${item.nome}?`)) {
-            item.quantidade -= 1;
-            salvar();
-            atualizarResumo();
+    // Abre a caixinha perguntando quantos tirar
+    const resposta = prompt(`A mesa tem ${item.quantidade}x ${item.nome}. \nQuantas unidades deseja remover?`, "1");
+
+    // Se cancelar ou não digitar nada, não faz nada
+    if (resposta === null || resposta === "") return;
+
+    const qtdParaRemover = parseInt(resposta);
+
+    // Valida se é um número válido
+    if (isNaN(qtdParaRemover) || qtdParaRemover <= 0) {
+        alert("Por favor, digite um número válido.");
+        return;
+    }
+
+    if (qtdParaRemover >= item.quantidade) {
+        // Se pedir pra tirar tudo ou mais do que tem, remove o item da lista
+        if (confirm(`Remover todas as unidades de ${item.nome}?`)) {
+            contas[mesaAtual].splice(index, 1);
         }
     } else {
-        if (confirm(`Remover ${item.nome} da comanda?`)) {
-            contas[mesaAtual].splice(index, 1);
-            salvar();
-            atualizarResumo();
-        }
+        // Se for menos, apenas subtrai a quantidade
+        item.quantidade -= qtdParaRemover;
     }
+
+    salvar();
+    atualizarResumo();
 }
 
 function finalizarConta() {
