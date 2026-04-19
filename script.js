@@ -20,10 +20,15 @@ function desenharMesas() {
     }
 }
 
+// FUNÇÃO ATUALIZADA: Adiciona o ícone de mesa no título da comanda
 function abrirMesa(num) {
     mesaAtual = num;
-    document.getElementById('area-pedido').style.display = 'flex';
-    document.getElementById('titulo-mesa').innerText = `Mesa ${num}`;
+    const area = document.getElementById('area-pedido');
+    area.style.display = 'flex';
+    
+    // Aqui adicionamos o ícone de mesa antes do número
+    document.getElementById('titulo-mesa').innerHTML = `🪑 Mesa ${num}`;
+    
     document.body.style.overflow = 'hidden'; 
     atualizarResumo();
 }
@@ -51,7 +56,7 @@ function atualizarResumo() {
                     <span><strong>${item.quantidade}x</strong> ${item.nome}</span>
                     <div>
                         <span style="font-weight:bold; margin-right:10px;">R$ ${sub.toFixed(2)}</span>
-                        <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:35px; height:35px;">X</button>
+                        <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:35px; height:35px; cursor:pointer;">X</button>
                     </div>
                 </div>`;
         });
@@ -61,9 +66,10 @@ function atualizarResumo() {
 
 function removerItem(index) {
     const item = contas[mesaAtual][index];
-    const resp = prompt(`Quantas unidades de ${item.nome} remover?`, "1");
-    if (resp) {
+    const resp = prompt(`Quantas unidades de ${item.nome} deseja remover?`, "1");
+    if (resp !== null && resp !== "") {
         const qtd = parseInt(resp);
+        if (isNaN(qtd) || qtd <= 0) return;
         if (qtd >= item.quantidade) { contas[mesaAtual].splice(index, 1); }
         else { item.quantidade -= qtd; }
         salvar(); atualizarResumo();
@@ -71,7 +77,7 @@ function removerItem(index) {
 }
 
 function finalizarConta() {
-    if (confirm("Fechar conta?")) { contas[mesaAtual] = []; salvar(); voltar(); }
+    if (confirm(`Fechar conta da Mesa ${mesaAtual}?`)) { contas[mesaAtual] = []; salvar(); voltar(); }
 }
 
 function voltar() {
