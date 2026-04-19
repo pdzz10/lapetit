@@ -13,11 +13,13 @@
             <img src="logo.png" alt="Logo Lapetit" class="logo-img">
             <h1>PIZZARIA LAPETIT</h1>
         </div>
-        <p>Selecione uma mesa abaixo</p>
+        <div style="text-align: center;">
+            <p>Selecione uma mesa abaixo</p>
+            <button class="btn-relatorio" onclick="exibirRelatorio()">Finalizar Dia</button>
+        </div>
     </header>
 
-    <main id="container-mesas">
-        </main>
+    <main id="container-mesas"></main>
 
     <div id="area-pedido" class="hidden">
         <div class="card-pedido">
@@ -74,6 +76,13 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <div id="area-relatorio" class="hidden">
+        <div class="card-pedido">
+            <h2>📊 Fechamento do Dia</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <p>Mesas Atendidas: <strong id="total-mesas-dia">0</strong></p>
+                <p>Total Vendido: <br><strong style="font-size: 1.5rem; color: #28a745;">R$ <span id="valor-total-dia">0.00</span></strong></p>
+            </div>
+            <div class="acoes">
+                <button class="btn-voltar" onclick="fecharRelatorio()">Voltar</button>
+                <button class="btn-fechar" style="background: #6f42c
