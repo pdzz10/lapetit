@@ -1,15 +1,12 @@
 let mesaAtual = null;
 let contas = JSON.parse(localStorage.getItem('contas_lapetit')) || {};
-let faturamento = JSON.parse(localStorage.getItem('faturamento_lapetit')) || { totalVendido: 0, totalMesas: 0 };
 
-// Inicializa as 20 mesas se o sistema for aberto pela primeira vez
 if (Object.keys(contas).length === 0) {
     for (let i = 1; i <= 20; i++) { contas[i] = []; }
 }
 
 function salvar() { 
     localStorage.setItem('contas_lapetit', JSON.stringify(contas)); 
-    localStorage.setItem('faturamento_lapetit', JSON.stringify(faturamento));
 }
 
 function desenharMesas() {
@@ -60,38 +57,10 @@ function atualizarResumo() {
 }
 
 function finalizarConta() {
-    let totalMesa = parseFloat(document.getElementById('total-mesa').innerText);
-    if (totalMesa <= 0) return alert("Adicione itens antes de fechar!");
-
-    if (confirm(`Fechar conta da Mesa ${mesaAtual} no valor de R$ ${totalMesa.toFixed(2)}?`)) {
-        // Adiciona ao faturamento do dia
-        faturamento.totalVendido += totalMesa;
-        faturamento.totalMesas += 1;
-        
+    if (confirm(`Fechar conta da Mesa ${mesaAtual}?`)) {
         contas[mesaAtual] = [];
         salvar();
         voltar();
-    }
-}
-
-function exibirRelatorio() {
-    const relatorio = document.getElementById('area-relatorio');
-    relatorio.style.display = 'flex';
-    relatorio.classList.remove('hidden');
-    document.getElementById('total-mesas-dia').innerText = faturamento.totalMesas;
-    document.getElementById('valor-total-dia').innerText = faturamento.totalVendido.toFixed(2);
-}
-
-function fecharRelatorio() {
-    document.getElementById('area-relatorio').style.display = 'none';
-    document.getElementById('area-relatorio').classList.add('hidden');
-}
-
-function zerarRelatorio() {
-    if (confirm("Isso vai apagar todo o faturamento de hoje. Confirmar?")) {
-        faturamento = { totalVendido: 0, totalMesas: 0 };
-        salvar();
-        exibirRelatorio();
     }
 }
 
@@ -102,5 +71,4 @@ function voltar() {
     desenharMesas();
 }
 
-// Inicia o sistema desenhando as mesas
 desenharMesas();

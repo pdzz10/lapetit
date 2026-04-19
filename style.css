@@ -12,14 +12,6 @@ body {
 
 .logo-img { height: 60px; width: auto; border-radius: 50%; }
 
-/* BOTÃO FINALIZAR DIA */
-.btn-relatorio {
-    background: #28a745; color: white; border: none;
-    padding: 10px 20px; border-radius: 10px;
-    font-weight: bold; cursor: pointer; margin-bottom: 15px;
-}
-
-/* GRID DE MESAS */
 #container-mesas {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 10px; width: 100%; max-width: 400px;
@@ -32,8 +24,7 @@ body {
 
 .mesa-ocupada { background: #ff9800 !important; color: white !important; border-color: #e68a00 !important; }
 
-/* TELAS DE PEDIDO E RELATÓRIO */
-#area-pedido, #area-relatorio {
+#area-pedido {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none;
     justify-content: center; align-items: flex-start;
@@ -53,19 +44,14 @@ body {
 
 .item-linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
 
-/* CARDÁPIO */
 #cardapio { max-height: 250px; overflow-y: auto; margin-bottom: 15px; text-align: left; }
 #cardapio p { font-weight: bold; color: #666; margin: 15px 0 5px 0; }
 
 #cardapio button {
-    width: 100%; padding: 12px; margin: 4px 0;
-    border: 1px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer;
-    background: white;
+    width: auto; padding: 8px; margin: 2px;
+    border: 1px solid #ddd; border-radius: 5px; cursor: pointer;
+    background: white; font-size: 12px;
 }
-
-/* CORES DOS BOTÕES DO CARDÁPIO */
-#cardapio button:nth-of-type(n+14):nth-of-type(-n+22) { background: #fd7e14; color: white; border: none; } /* Pizzas */
-#cardapio button:nth-of-type(n+23) { background: #17a2b8; color: white; border: none; } /* Bebidas */
 
 .total-container { background: #e9ecef; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
 
