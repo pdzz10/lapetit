@@ -32,12 +32,12 @@ h2 {
     max-width: 500px;
 }
 
-/* VISUAL DAS MESAS EM VERMELHO */
+/* VISUAL DAS MESAS (VERMELHO) */
 .btn-mesa {
     aspect-ratio: 1/1;
     background: white;
-    border: 2px solid #e74c3c; /* Vermelho na borda */
-    color: #e74c3c;            /* Vermelho no texto */
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
     border-radius: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -50,13 +50,11 @@ h2 {
     transition: all 0.2s ease;
 }
 
-/* Efeito ao tocar na mesa */
 .btn-mesa:active {
     transform: scale(0.92);
-    background-color: #fdecea; /* Fundo rosinha claro ao clicar */
 }
 
-/* MESA OCUPADA (Continua Laranja para destacar bem) */
+/* MESA OCUPADA (LARANJA) */
 .mesa-ocupada {
     background: #ff9800 !important;
     border-color: #ff9800 !important;
@@ -64,17 +62,21 @@ h2 {
     box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
 }
 
-/* ÁREA DO PEDIDO (MODAL) */
+/* ÁREA DO PEDIDO (O MODAL QUE APARECE) */
 #area-pedido {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
     background: rgba(0,0,0,0.8);
-    display: none;
+    display: none; /* O script muda para flex ao abrir */
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-start; /* Alinha no topo para permitir scroll */
     padding-top: 20px;
+    padding-bottom: 20px;
     z-index: 1000;
+    overflow-y: auto; /* Permite rolar a comanda se for longa */
 }
 
 .card-pedido {
@@ -84,9 +86,19 @@ h2 {
     width: 90%;
     max-width: 400px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    margin-bottom: 20px; /* Espaço no final ao rolar */
 }
 
-/* BOTÕES DE BAIXO */
+/* ITENS DA COMANDA */
+.item-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* BOTÕES NO RODAPÉ DA COMANDA */
 .botoes-rodape {
     display: flex;
     gap: 10px;
@@ -99,7 +111,7 @@ h2 {
     color: white;
     border: none;
     border-radius: 12px;
-    padding: 15px;
+    padding: 18px;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
@@ -111,7 +123,13 @@ h2 {
     color: white;
     border: none;
     border-radius: 12px;
-    padding: 15px;
+    padding: 18px;
     font-size: 16px;
     cursor: pointer;
+}
+
+/* AJUSTE PARA O BOTÃO X NO PC */
+.item-linha button {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
