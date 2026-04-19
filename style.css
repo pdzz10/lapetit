@@ -1,0 +1,65 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0; padding: 10px;
+    display: flex; flex-direction: column; align-items: center;
+}
+
+.logo-container {
+    display: flex; align-items: center; justify-content: center;
+    gap: 15px; margin-bottom: 10px;
+}
+
+.logo-img { height: 60px; width: auto; border-radius: 50%; }
+
+#container-mesas {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 10px; width: 100%; max-width: 400px;
+}
+
+.btn-mesa {
+    aspect-ratio: 1/1; background: white; border: 2px solid #007bff;
+    color: #007bff; border-radius: 12px; font-weight: bold; cursor: pointer;
+}
+
+.mesa-ocupada { background: #ff9800 !important; color: white !important; border-color: #e68a00 !important; }
+
+#area-pedido {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); display: none;
+    justify-content: center; align-items: flex-start;
+    overflow-y: auto; z-index: 9999; padding: 20px 0;
+}
+
+.card-pedido {
+    background: white; padding: 20px; border-radius: 20px;
+    width: 90%; max-width: 380px; text-align: center;
+}
+
+.hidden { display: none !important; }
+
+#comanda-detalhada {
+    background: #f8f9fa; border-radius: 10px; padding: 10px; margin-bottom: 15px;
+}
+
+#lista-comanda { max-height: 150px; overflow-y: auto; }
+
+.item-linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+
+.btn-remover { background: red; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; }
+
+#cardapio { max-height: 250px; overflow-y: auto; margin-bottom: 15px; text-align: left; }
+
+#cardapio p { font-weight: bold; color: #666; margin: 15px 0 5px 0; font-size: 13px; }
+
+#cardapio button {
+    width: 100%; padding: 12px; margin: 4px 0;
+    background: white; border: 1px solid #ddd;
+    border-radius: 8px; font-weight: bold; cursor: pointer;
+}
+
+.total-container { background: #e9ecef; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+
+.acoes { display: flex; gap: 10px; }
+.btn-fechar { flex: 2; background: #dc3545; color: white; border: none; border-radius: 10px; padding: 15px; font-weight: bold; }
+.btn-voltar { flex: 1; background: #6c757d; color: white; border: none; border-radius: 10px; padding: 15px; }

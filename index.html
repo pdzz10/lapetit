@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pizzaria Lapetit - Sistema</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo Lapetit" class="logo-img">
+            <h1>PIZZARIA LAPETIT</h1>
+        </div>
+        <p>Selecione uma mesa abaixo</p>
+    </header>
+
+    <main id="container-mesas">
+        </main>
+
+    <div id="area-pedido" class="hidden">
+        <div class="card-pedido">
+            <h2 id="titulo-mesa">Mesa</h2>
+            
+            <div id="comanda-detalhada">
+                <p>📋 Itens na Comanda:</p>
+                <div id="lista-comanda"></div>
+            </div>
+
+            <div id="cardapio">
+                <p>🍺 CERVEJAS LITRÃO / GARRAFA</p>
+                <button onclick="adicionarItem('Litrão Brahma', 12.00)">Litrão Brahma (R$ 12)</button>
+                <button onclick="adicionarItem('Litrão Skol', 12.00)">Litrão Skol (R$ 12)</button>
+                <button onclick="adicionarItem('Litrão Schin', 10.00)">Litrão Schin (R$ 10)</button>
+                <button onclick="adicionarItem('Litrão Itaipava', 12.00)">Litrão Itaipava (R$ 12)</button>
+                <button onclick="adicionarItem('Litrão Devassa', 12.00)">Litrão Devassa (R$ 12)</button>
+                <button onclick="adicionarItem('Litrão Budweiser', 13.00)">Litrão Budweiser (R$ 13)</button>
+                <button onclick="adicionarItem('Litrinho Brahma', 6.00)">Litrinho Brahma (R$ 6)</button>
+                <button onclick="adicionarItem('Litrinho Skol', 6.00)">Litrinho Skol (R$ 6)</button>
+                <button onclick="adicionarItem('Litrinho Devassa', 6.00)">Litirnho Devassa (R$ 6)</button>
+                <button onclick="adicionarItem('Heineken', 10.00)">Heineken (R$ 10)</button>
+                <button onclick="adicionarItem('Budweiser Latão', 10.00)">Budweiser Latão (R$ 10)</button>
+                <button onclick="adicionarItem('Skol Latão', 7.00)">Skol Latão (R$ 7)</button>
+                <button onclick="adicionarItem('Brahma Latão', 7.00)">Brahma Latão (R$ 7)</button>
+
+                <p>🍕 PIZZAS E PORÇÕES</p>
+                <button onclick="adicionarItem('Pizza Brotinho', 12.00)">Pizza Brotinho (R$ 12)</button>
+                <button onclick="adicionarItem('Pizza Pequena', 25.00)">Pizza Pequena (R$ 25)</button>
+                <button onclick="adicionarItem('Pizza Média', 30.00)">Pizza Média (R$ 30)</button>
+                <button onclick="adicionarItem('Pizza Grande', 40.00)">Pizza Grande (R$ 40)</button>
+                <button onclick="adicionarItem('Pizza Gigante', 50.00)">Pizza Gigante (R$ 50)</button>
+                <button onclick="adicionarItem('Batata Frita', 13.00)">Batata Frita (R$ 13)</button>
+                <button onclick="adicionarItem('Carne de Sol', 30.00)">Carne de Sol (R$ 30)</button>
+                <button onclick="adicionarItem('Calabresa', 25.00)">Pizza Calabresa (R$ 25)</button>
+                <button onclick="adicionarItem('Camarão', 30.00)">Camarão (R$ 30)</button>
+
+                <p>🥤 BEBIDAS</p>
+                <button onclick="adicionarItem('Guaraná Lata', 6.00)">Guaraná Lata (R$ 6)</button>
+                <button onclick="adicionarItem('Coca Lata', 6.00)">Coca Lata (R$ 6)</button>
+                <button onclick="adicionarItem('Guaraná 1 Litro', 12.00)">Guaraná 1 Litro (R$ 12)</button>
+                <button onclick="adicionarItem('Coca 1 Litro', 12.00)">Coca 1 Litro (R$ 12)</button>
+                <button onclick="adicionarItem('Coco', 4.00)">Coco (R$ 4)</button>
+            </div>
+
+            <div class="total-container">
+                <h3>Total: R$ <span id="total-mesa">0.00</span></h3>
+            </div>
+
+            <div class="acoes">
+                <button class="btn-fechar" onclick="finalizarConta()">Fechar Conta</button>
+                <button class="btn-voltar" onclick="voltar()">Voltar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
