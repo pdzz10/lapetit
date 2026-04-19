@@ -39,6 +39,7 @@ function adicionarItem(nome, preco) {
     }
 }
 
+// FUNÇÃO ATUALIZADA COM BOTÃO DE REMOVER
 function atualizarResumo() {
     const lista = document.getElementById('lista-comanda');
     const totalExibicao = document.getElementById('total-mesa');
@@ -46,16 +47,28 @@ function atualizarResumo() {
     lista.innerHTML = '';
     
     if(contas[mesaAtual]) {
-        contas[mesaAtual].forEach((item) => {
+        contas[mesaAtual].forEach((item, index) => {
             total += item.preco;
             lista.innerHTML += `
-                <div class="item-linha">
+                <div class="item-linha" style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0;">
                     <span>${item.nome}</span>
-                    <span>R$ ${item.preco.toFixed(2)}</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span>R$ ${item.preco.toFixed(2)}</span>
+                        <button onclick="removerItem(${index})" style="background: #dc3545; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-weight: bold;">X</button>
+                    </div>
                 </div>`;
         });
     }
     totalExibicao.innerText = total.toFixed(2);
+}
+
+// NOVA FUNÇÃO PARA EXCLUIR ITEM ESPECÍFICO
+function removerItem(index) {
+    if (confirm("Deseja remover este item?")) {
+        contas[mesaAtual].splice(index, 1);
+        salvar();
+        atualizarResumo();
+    }
 }
 
 function finalizarConta() {
