@@ -39,7 +39,7 @@ function adicionarItem(nome, preco) {
     }
 }
 
-// FUNÇÃO ATUALIZADA COM BOTÃO DE REMOVER
+// FUNÇÃO COM O BOTÃO "X" OTIMIZADO PARA CELULAR
 function atualizarResumo() {
     const lista = document.getElementById('lista-comanda');
     const totalExibicao = document.getElementById('total-mesa');
@@ -50,11 +50,11 @@ function atualizarResumo() {
         contas[mesaAtual].forEach((item, index) => {
             total += item.preco;
             lista.innerHTML += `
-                <div class="item-linha" style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0;">
-                    <span>${item.nome}</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span>R$ ${item.preco.toFixed(2)}</span>
-                        <button onclick="removerItem(${index})" style="background: #dc3545; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-weight: bold;">X</button>
+                <div class="item-linha" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+                    <span style="flex: 1; text-align: left; font-size: 14px;">${item.nome}</span>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-weight: bold; min-width: 70px; text-align: right;">R$ ${item.preco.toFixed(2)}</span>
+                        <button onclick="removerItem(${index})" style="background-color: #ff4444 !important; color: white !important; border: none; border-radius: 8px; width: 38px; height: 38px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; -webkit-appearance: none; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">X</button>
                     </div>
                 </div>`;
         });
@@ -62,7 +62,6 @@ function atualizarResumo() {
     totalExibicao.innerText = total.toFixed(2);
 }
 
-// NOVA FUNÇÃO PARA EXCLUIR ITEM ESPECÍFICO
 function removerItem(index) {
     if (confirm("Deseja remover este item?")) {
         contas[mesaAtual].splice(index, 1);
