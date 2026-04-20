@@ -13,11 +13,19 @@ body {
 .card-alerta-comida { background: #fff3cd; border-left: 6px solid #ffc107; padding: 12px; margin-bottom: 10px; border-radius: 12px; text-align: left; animation: pulse 1.5s infinite; cursor: pointer; }
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-/* Modais */
-#area-pedido, #area-relatorio { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; overflow-y: auto; padding-top: 20px; z-index: 1000; }
-.card-pedido { background: white; padding: 20px; border-radius: 25px; width: 90%; max-width: 450px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+/* Modais - CORRIGIDO PARA NÃO CORTAR O FUNDO BRANCO */
+#area-pedido, #area-relatorio { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.85); display: none; justify-content: center; 
+    overflow-y: auto; padding: 20px 0; z-index: 1000; 
+}
+.card-pedido { 
+    background: white; padding: 20px; border-radius: 25px; 
+    width: 90%; max-width: 450px; height: auto; margin: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
 
-/* Cores dos Botões do Menu - CORRIGIDO */
+/* Cores dos Botões do Menu */
 #area-pedido button:not(.btn-fechar):not(.btn-voltar):not(.btn-dividir):not(.item-linha button) {
     display: block; width: 100%; margin: 8px 0; padding: 16px; border-radius: 12px; text-align: left; font-weight: bold; border: none; cursor: pointer;
 }
@@ -26,10 +34,7 @@ body {
 .btn-bebida { background-color: #eafff0 !important; color: #27ae60 !important; border-left: 6px solid #27ae60 !important; }
 
 .item-linha { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-.botoes-rodape { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
+.botoes-rodape { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; padding-bottom: 20px; }
 .btn-dividir { background: #3498db; color: white; border: none; border-radius: 12px; padding: 15px; font-weight: bold; }
 .btn-fechar { background: #e74c3c; color: white; border: none; border-radius: 12px; padding: 18px; font-weight: bold; }
 .btn-voltar { background: #bdc3c7; color: white; border: none; border-radius: 12px; padding: 18px; }
-
-#resumo-por-tipo { background: #f0f7f4; padding: 15px; border-radius: 15px; margin: 20px 0; border: 1px solid #27ae60; }
-#resumo-por-tipo p { margin: 5px 0; display: flex; justify-content: space-between; font-size: 14px; }

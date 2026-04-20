@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lapetit Sistema</title>
-    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#e74c3c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,11 +16,6 @@
     <img src="logo.png" class="logo-img">
     <h2>Pizzaria Lapetit</h2>
     <button class="btn-relatorio" onclick="abrirRelatorio()">📊 Relatório do Dia</button>
-
-    <div id="secao-pendentes" style="width: 100%; max-width: 450px; display: none; margin-bottom: 20px;">
-        <h4 style="color: #e74c3c; margin: 0 0 10px 5px; text-align: left;">⏳ Pendente de Entrega:</h4>
-        <div id="lista-pendentes"></div>
-    </div>
 
     <div id="container-mesas"></div>
 
@@ -36,13 +29,7 @@
             <h3>🍺 CERVEJAS</h3>
             <button class="btn-cerveja" onclick="adicionarItem('Litrão Brahma', 12)">Litrão Brahma (R$ 12)</button>
             <button class="btn-cerveja" onclick="adicionarItem('Litrão Skol', 12)">Litrão Skol (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Schin', 10)">Litrão Schin (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Devassa', 12)">Litrão Devassa (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Antarctica', 10)">Litrão Antarctica (R$ 10)</button>
             <button class="btn-cerveja" onclick="adicionarItem('Heineken', 10)">Heineken (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Spaten', 10)">Spaten (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Brahma', 5)">Litrinho Brahma (R$ 5)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Skol', 5)">Litrinho Skol (R$ 5)</button>
 
             <h3>🍕 PIZZAS E PORÇÕES</h3>
             <button class="btn-pizza" onclick="adicionarItem('Pizza Brotinho', 12)">Pizza Brotinho (R$ 12)</button>
@@ -67,19 +54,7 @@
                     <button class="btn-voltar" onclick="voltar()" style="flex:1;">Voltar</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="area-relatorio">
-        <div class="card-pedido">
-            <h2>📊 Resumo do Dia</h2>
-            <div id="lista-vendas"></div>
-            <div id="resumo-por-tipo"></div>
-            <h1 style="color:#27ae60;">Total: R$ <span id="total-vendas-dia">0.00</span></h1>
-            <button class="btn-voltar" onclick="fecharRelatorio()" style="width:100%; padding:15px;">Sair</button>
-            <button onclick="resetarRelatorio()" style="width:100%; margin-top:20px; background:none; border:none; color:gray; font-size:11px;">Zerar Tudo</button>
-        </div>
-    </div>
+        </div> </div>
 
     <script src="script.js"></script>
 </body>
