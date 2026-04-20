@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lapetit Sistema</title>
+    <title>Lapetit Sistema Interno</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,6 +11,11 @@
     <img src="logo.png" class="logo-img">
     <h2>Pizzaria Lapetit</h2>
     <button class="btn-relatorio" onclick="abrirRelatorio()">📊 Relatório do Dia</button>
+
+    <div id="secao-pendentes" style="width: 100%; max-width: 450px; display: none; margin-bottom: 20px;">
+        <h4 style="color: #e74c3c; margin: 0 0 10px 5px; text-align: left;">⏳ Pendente de Entrega:</h4>
+        <div id="lista-pendentes"></div>
+    </div>
 
     <div id="container-mesas"></div>
 
@@ -20,6 +25,7 @@
             <div id="lista-comanda"></div>
             <h2 style="margin: 15px 0;">Total: R$ <span id="total-mesa">0.00</span></h2>
             <hr>
+            
             <h3>🍺 CERVEJAS</h3>
             <button class="btn-cerveja" onclick="adicionarItem('Litrão Brahma', 12)">Litrão Brahma (R$ 12)</button>
             <button class="btn-cerveja" onclick="adicionarItem('Litrão Skol', 12)">Litrão Skol (R$ 12)</button>
@@ -66,10 +72,10 @@
         <div class="card-pedido">
             <h2>📊 Resumo do Dia</h2>
             <div id="lista-vendas"></div>
-            <div id="resumo-por-tipo" style="background:#f0f7f4; padding:15px; border-radius:15px; margin:20px 0; text-align:left; border:1px solid #27ae60;"></div>
-            <h1 style="color:#27ae60;">Total Geral: R$ <span id="total-vendas-dia">0.00</span></h1>
-            <button class="btn-voltar" onclick="fecharRelatorio()" style="width:100%; padding:15px; margin-top:10px;">Voltar</button>
-            <button onclick="resetarRelatorio()" style="width:100%; margin-top:25px; background:none; border:none; color:gray; font-size:11px;">Zerar Dados</button>
+            <div id="resumo-por-tipo"></div>
+            <h1 style="color:#27ae60;">Total: R$ <span id="total-vendas-dia">0.00</span></h1>
+            <button class="btn-voltar" onclick="fecharRelatorio()" style="width:100%; padding:15px;">Sair</button>
+            <button onclick="resetarRelatorio()" style="width:100%; margin-top:20px; background:none; border:none; color:gray; font-size:11px;">Zerar Dados</button>
         </div>
     </div>
 

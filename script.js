@@ -1,6 +1,7 @@
 let mesaAtual = null;
 let contas = JSON.parse(localStorage.getItem('contas_lapetit')) || {};
 let historicoVendas = JSON.parse(localStorage.getItem('vendas_dia_lapetit')) || [];
+let pendentes = JSON.parse(localStorage.getItem('pendentes_lapetit')) || [];
 
 if (Object.keys(contas).length === 0) {
     for (let i = 1; i <= 20; i++) { contas[i] = []; }
@@ -9,6 +10,7 @@ if (Object.keys(contas).length === 0) {
 function salvar() { 
     localStorage.setItem('contas_lapetit', JSON.stringify(contas)); 
     localStorage.setItem('vendas_dia_lapetit', JSON.stringify(historicoVendas));
+    localStorage.setItem('pendentes_lapetit', JSON.stringify(pendentes));
 }
 
 function desenharMesas() {
@@ -16,12 +18,14 @@ function desenharMesas() {
     if (!container) return;
     container.innerHTML = '';
     for (let i = 1; i <= 20; i++) {
+        const totalItens = (contas[i] || []).reduce((acc, item) => acc + item.quantidade, 0);
         const btn = document.createElement('button');
-        btn.innerHTML = `🍕<br>Mesa ${i}`;
+        btn.innerHTML = `🍕<br>Mesa ${i}${totalItens > 0 ? `<br><small style="font-size:10px;">(${totalItens} itens)</small>` : ''}`;
         btn.className = 'btn-mesa ' + (contas[i] && contas[i].length > 0 ? 'mesa-ocupada' : '');
         btn.onclick = () => abrirMesa(i);
         container.appendChild(btn);
     }
+    atualizarAlertas();
 }
 
 function abrirMesa(num) {
@@ -37,8 +41,43 @@ function adicionarItem(nome, preco) {
         const itemExistente = contas[mesaAtual].find(i => i.nome === nome);
         if (itemExistente) { itemExistente.quantidade += 1; }
         else { contas[mesaAtual].push({ nome, preco, quantidade: 1 }); }
+        
+        // Verifica se é item de cozinha para criar alerta
+        const itensCozinha = ['Pizza', 'Batata', 'Camarão', 'Carne', 'Calabresa', 'Brotinho'];
+        if (itensCozinha.some(k => nome.includes(k))) {
+            const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            pendentes.push({ mesa: mesaAtual, item: nome, hora: hora });
+        }
+
         atualizarResumo();
         salvar();
+        atualizarAlertas();
+    }
+}
+
+function atualizarAlertas() {
+    const container = document.getElementById('secao-pendentes');
+    const lista = document.getElementById('lista-pendentes');
+    if (pendentes.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+    container.style.display = 'block';
+    lista.innerHTML = '';
+    pendentes.forEach((p, index) => {
+        lista.innerHTML += `
+            <div class="card-alerta-comida" onclick="confirmarEntrega(${index})">
+                <span><strong>Mesa ${p.mesa}</strong>: ${p.item}</span>
+                <small>${p.hora} - Toque ao entregar ✅</small>
+            </div>`;
+    });
+}
+
+function confirmarEntrega(index) {
+    if (confirm("Item entregue na mesa?")) {
+        pendentes.splice(index, 1);
+        salvar();
+        atualizarAlertas();
     }
 }
 
@@ -55,7 +94,7 @@ function atualizarResumo() {
                     <span><strong>${item.quantidade}x</strong> ${item.nome}</span>
                     <div>
                         <span style="font-weight:bold; margin-right:10px;">R$ ${sub.toFixed(2)}</span>
-                        <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:35px; height:35px; cursor:pointer;">X</button>
+                        <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:35px; height:35px;">X</button>
                     </div>
                 </div>`;
         });
@@ -63,21 +102,9 @@ function atualizarResumo() {
     document.getElementById('total-mesa').innerText = total.toFixed(2);
 }
 
-function dividirConta() {
-    const total = parseFloat(document.getElementById('total-mesa').innerText);
-    if (total <= 0) return alert("Comanda vazia!");
-    setTimeout(() => {
-        const pessoas = prompt("Dividir em quantas pessoas?", "2");
-        if (pessoas) {
-            const n = parseInt(pessoas);
-            if (n > 0) alert(`Total: R$ ${total.toFixed(2)}\nCada um paga: R$ ${(total/n).toFixed(2)}`);
-        }
-    }, 100);
-}
-
 function removerItem(index) {
     const item = contas[mesaAtual][index];
-    const resp = prompt(`Remover quantas unidades de ${item.nome}?`, "1");
+    const resp = prompt(`Remover quantas de ${item.nome}?`, "1");
     if (resp) {
         const qtd = parseInt(resp);
         if (qtd >= item.quantidade) { contas[mesaAtual].splice(index, 1); }
@@ -88,27 +115,18 @@ function removerItem(index) {
 
 function finalizarConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
-    if (total <= 0) return alert("Não é possível fechar uma mesa vazia.");
-
-    const formaPagamento = prompt("Forma de Pagamento:\n1 - PIX\n2 - Dinheiro\n3 - Cartão", "1");
-    
+    if (total <= 0) return;
+    const forma = prompt("1-PIX, 2-Dinheiro, 3-Cartão", "1");
     let tipo = "";
-    if (formaPagamento === "1") {
-        tipo = "PIX";
-    } else if (formaPagamento === "2") {
-        tipo = "Dinheiro";
-    } else if (formaPagamento === "3") {
-        const subTipo = prompt("Tipo de Cartão:\n1 - Débito\n2 - Crédito", "1");
-        if (subTipo === "1") tipo = "Débito";
-        else if (subTipo === "2") tipo = "Crédito";
-        else return alert("Cancelado.");
-    } else {
-        return; 
-    }
+    if (forma === "1") tipo = "PIX";
+    else if (forma === "2") tipo = "Dinheiro";
+    else if (forma === "3") {
+        const sub = prompt("1-Débito, 2-Crédito", "1");
+        tipo = sub === "1" ? "Débito" : "Crédito";
+    } else return;
 
-    if (confirm(`Fechar Mesa ${mesaAtual} - R$ ${total.toFixed(2)} (${tipo})?`)) {
-        const agora = new Date();
-        const hora = agora.getHours().toString().padStart(2, '0') + ":" + agora.getMinutes().toString().padStart(2, '0');
+    if (confirm(`Fechar Mesa ${mesaAtual}?`)) {
+        const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         historicoVendas.push({ mesa: mesaAtual, total: total, hora: hora, pagamento: tipo });
         contas[mesaAtual] = [];
         salvar();
@@ -120,52 +138,28 @@ function abrirRelatorio() {
     const area = document.getElementById('area-relatorio');
     const lista = document.getElementById('lista-vendas');
     const resumo = document.getElementById('resumo-por-tipo');
-    const totalGeral = document.getElementById('total-vendas-dia');
-    
-    let somaTotal = 0;
-    let totais = { "PIX": 0, "Dinheiro": 0, "Débito": 0, "Crédito": 0 };
-    
+    let soma = 0;
+    let t = { PIX: 0, Dinheiro: 0, Débito: 0, Crédito: 0 };
+
     lista.innerHTML = '';
-    historicoVendas.forEach((venda) => {
-        somaTotal += venda.total;
-        if (totais[venda.pagamento] !== undefined) {
-            totais[venda.pagamento] += venda.total;
-        }
-        lista.innerHTML += `
-            <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center;">
-                <span>⏰ ${venda.hora} - M${venda.mesa}</span>
-                <span style="background:#eee; padding:2px 8px; border-radius:5px; font-size:10px;">${venda.pagamento}</span>
-                <strong>R$ ${venda.total.toFixed(2)}</strong>
-            </div>`;
+    historicoVendas.forEach(v => {
+        soma += v.total;
+        t[v.pagamento] += v.total;
+        lista.innerHTML += `<div class="item-linha"><span>${v.hora} - M${v.mesa} (${v.pagamento})</span> <strong>R$ ${v.total.toFixed(2)}</strong></div>`;
     });
-    
-    resumo.innerHTML = `
-        <p>📱 PIX: <b>R$ ${totais["PIX"].toFixed(2)}</b></p>
-        <p>💵 Dinheiro: <b>R$ ${totais["Dinheiro"].toFixed(2)}</b></p>
-        <p>💳 Débito: <b>R$ ${totais["Débito"].toFixed(2)}</b></p>
-        <p>💳 Crédito: <b>R$ ${totais["Crédito"].toFixed(2)}</b></p>
-    `;
 
-    totalGeral.innerText = somaTotal.toFixed(2);
+    resumo.innerHTML = `<p>PIX: <b>R$ ${t.PIX.toFixed(2)}</b></p><p>Dinheiro: <b>R$ ${t.Dinheiro.toFixed(2)}</b></p><p>Débito: <b>R$ ${t.Débito.toFixed(2)}</b></p><p>Crédito: <b>R$ ${t.Crédito.toFixed(2)}</b></p>`;
+    document.getElementById('total-vendas-dia').innerText = soma.toFixed(2);
     area.style.display = 'block';
-    document.body.style.overflow = 'hidden';
 }
 
-function fecharRelatorio() {
-    document.getElementById('area-relatorio').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-function resetarRelatorio() {
-    if (confirm("Deseja zerar o relatório?")) {
-        historicoVendas = []; salvar(); abrirRelatorio();
-    }
-}
-
-function voltar() {
-    document.getElementById('area-pedido').style.display = 'none';
-    document.body.style.overflow = 'auto';
-    desenharMesas();
+function voltar() { document.getElementById('area-pedido').style.display = 'none'; document.body.style.overflow = 'auto'; desenharMesas(); }
+function fecharRelatorio() { document.getElementById('area-relatorio').style.display = 'none'; }
+function resetarRelatorio() { if(confirm("Zerar?")) { historicoVendas = []; salvar(); abrirRelatorio(); } }
+function dividirConta() {
+    const total = parseFloat(document.getElementById('total-mesa').innerText);
+    const p = prompt("Dividir por quantos?", "2");
+    if(p) alert(`Cada um paga: R$ ${(total/p).toFixed(2)}`);
 }
 
 desenharMesas();
