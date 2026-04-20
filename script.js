@@ -1,6 +1,7 @@
 let mesaAtual = null;
 let contas = JSON.parse(localStorage.getItem('contas_lapetit')) || {};
 let historicoVendas = JSON.parse(localStorage.getItem('vendas_dia_lapetit')) || [];
+let pendentes = JSON.parse(localStorage.getItem('pendentes_lapetit')) || []; // NOVA LISTA
 
 if (Object.keys(contas).length === 0) {
     for (let i = 1; i <= 20; i++) { contas[i] = []; }
@@ -9,6 +10,7 @@ if (Object.keys(contas).length === 0) {
 function salvar() { 
     localStorage.setItem('contas_lapetit', JSON.stringify(contas)); 
     localStorage.setItem('vendas_dia_lapetit', JSON.stringify(historicoVendas));
+    localStorage.setItem('pendentes_lapetit', JSON.stringify(pendentes)); // SALVA PENDENTES
 }
 
 function desenharMesas() {
@@ -23,6 +25,7 @@ function desenharMesas() {
         btn.onclick = () => abrirMesa(i);
         container.appendChild(btn);
     }
+    atualizarAlertas(); // ATUALIZA A TELA INICIAL
 }
 
 function abrirMesa(num) {
@@ -38,7 +41,39 @@ function adicionarItem(nome, preco) {
         const itemExistente = contas[mesaAtual].find(i => i.nome === nome);
         if (itemExistente) { itemExistente.quantidade += 1; }
         else { contas[mesaAtual].push({ nome, preco, quantidade: 1 }); }
-        atualizarResumo(); salvar();
+        
+        // LOGICA DE COZINHA: Verifica se é comida
+        const itensCozinha = ['Pizza', 'Batata', 'Camarão', 'Calabresa', 'Brotinho', 'Porção'];
+        if (itensCozinha.some(palavra => nome.includes(palavra))) {
+            const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            pendentes.push({ mesa: mesaAtual, item: nome, hora: hora });
+        }
+
+        atualizarResumo(); salvar(); atualizarAlertas();
+    }
+}
+
+function atualizarAlertas() {
+    const secao = document.getElementById('secao-pendentes');
+    const lista = document.getElementById('lista-pendentes');
+    if (pendentes.length === 0) { secao.style.display = 'none'; return; }
+    
+    secao.style.display = 'block';
+    lista.innerHTML = '';
+    pendentes.forEach((p, index) => {
+        lista.innerHTML += `
+            <div class="card-alerta-comida" onclick="confirmarEntrega(${index})">
+                <span><strong>Mesa ${p.mesa}</strong>: ${p.item}</span>
+                <small>${p.hora} - Toque para OK ✅</small>
+            </div>`;
+    });
+}
+
+function confirmarEntrega(index) {
+    if (confirm("Este item já foi entregue à mesa?")) {
+        pendentes.splice(index, 1);
+        salvar();
+        atualizarAlertas();
     }
 }
 
@@ -69,14 +104,7 @@ function finalizarConta() {
     const forma = prompt("1-PIX, 2-Dinheiro, 3-Cartão", "1");
     let tipo = forma === "1" ? "PIX" : (forma === "2" ? "Dinheiro" : "Cartão");
     if (confirm(`Fechar Mesa ${mesaAtual}?`)) {
-        // O ID único aqui ajuda a contar atendimentos separados se necessário
-        historicoVendas.push({ 
-            idAtendimento: Date.now(), 
-            mesa: mesaAtual, 
-            total: total, 
-            hora: new Date().toLocaleTimeString(), 
-            pagamento: tipo 
-        });
+        historicoVendas.push({ mesa: mesaAtual, total: total, hora: new Date().toLocaleTimeString(), pagamento: tipo });
         contas[mesaAtual] = [];
         salvar(); voltar();
     }
@@ -87,21 +115,17 @@ function abrirRelatorio() {
     const lista = document.getElementById('lista-vendas');
     const displayQtd = document.getElementById('qtd-mesas-atendidas');
     let soma = 0;
-    
-    // Contamos atendimentos únicos (cada vez que uma conta foi fechada)
     displayQtd.innerText = historicoVendas.length;
-
     lista.innerHTML = historicoVendas.map(v => {
         soma += v.total;
         return `<p style="font-size:13px; border-bottom:1px solid #eee; padding:5px 0;">${v.hora} - M${v.mesa}: R$ ${v.total.toFixed(2)} (${v.pagamento})</p>`;
     }).join('');
-    
     document.getElementById('total-vendas-dia').innerText = soma.toFixed(2);
     area.style.display = 'flex';
 }
 
 function fecharRelatorio() { document.getElementById('area-relatorio').style.display = 'none'; }
 function voltar() { document.getElementById('area-pedido').style.display = 'none'; document.body.style.overflow = 'auto'; desenharMesas(); }
-function resetarRelatorio() { if(confirm("Deseja zerar as vendas para começar uma nova noite?")) { historicoVendas = []; salvar(); abrirRelatorio(); } }
+function resetarRelatorio() { if(confirm("Zerar tudo?")) { historicoVendas = []; pendentes = []; salvar(); abrirRelatorio(); } }
 
 desenharMesas();
