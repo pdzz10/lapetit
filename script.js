@@ -90,13 +90,21 @@ function finalizarConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
     if (total <= 0) return alert("Não é possível fechar uma mesa vazia.");
 
-    const formaPagamento = prompt("Forma de Pagamento:\n1 - PIX\n2 - Dinheiro\n3 - Cartão (Débito/Crédito)", "1");
+    const formaPagamento = prompt("Forma de Pagamento:\n1 - PIX\n2 - Dinheiro\n3 - Cartão", "1");
     
     let tipo = "";
-    if (formaPagamento === "1") tipo = "PIX";
-    else if (formaPagamento === "2") tipo = "Dinheiro";
-    else if (formaPagamento === "3") tipo = "Cartão";
-    else return; // Cancelado
+    if (formaPagamento === "1") {
+        tipo = "PIX";
+    } else if (formaPagamento === "2") {
+        tipo = "Dinheiro";
+    } else if (formaPagamento === "3") {
+        const subTipo = prompt("Tipo de Cartão:\n1 - Débito\n2 - Crédito", "1");
+        if (subTipo === "1") tipo = "Cartão (Débito)";
+        else if (subTipo === "2") tipo = "Cartão (Crédito)";
+        else return alert("Operação cancelada: Tipo de cartão inválido.");
+    } else {
+        return; 
+    }
 
     if (confirm(`Fechar Mesa ${mesaAtual} no valor de R$ ${total.toFixed(2)} (${tipo})?`)) {
         const agora = new Date();
@@ -122,7 +130,7 @@ function abrirRelatorio() {
         lista.innerHTML += `
             <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center;">
                 <span>⏰ ${venda.hora} - <strong>Mesa ${venda.mesa}</strong></span>
-                <span style="background:#eee; padding:2px 8px; border-radius:5px; font-size:11px;">${venda.pagamento}</span>
+                <span style="background:#eee; padding:2px 8px; border-radius:5px; font-size:10px; text-align:center;">${venda.pagamento}</span>
                 <strong style="color:#27ae60;">R$ ${venda.total.toFixed(2)}</strong>
             </div>`;
     });
