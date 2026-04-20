@@ -20,15 +20,10 @@ function desenharMesas() {
     }
 }
 
-// FUNÇÃO ATUALIZADA: Adiciona o ícone de mesa no título da comanda
 function abrirMesa(num) {
     mesaAtual = num;
-    const area = document.getElementById('area-pedido');
-    area.style.display = 'flex';
-    
-    // Aqui adicionamos o ícone de mesa antes do número
+    document.getElementById('area-pedido').style.display = 'flex';
     document.getElementById('titulo-mesa').innerHTML = `🪑 Mesa ${num}`;
-    
     document.body.style.overflow = 'hidden'; 
     atualizarResumo();
 }
@@ -64,12 +59,21 @@ function atualizarResumo() {
     document.getElementById('total-mesa').innerText = total.toFixed(2);
 }
 
+function dividirConta() {
+    const total = parseFloat(document.getElementById('total-mesa').innerText);
+    if (total <= 0) return alert("Comanda vazia!");
+    const pessoas = prompt("Dividir em quantas pessoas?", "2");
+    if (pessoas) {
+        const n = parseInt(pessoas);
+        if (n > 0) alert(`Total: R$ ${total.toFixed(2)}\nCada um paga: R$ ${(total/n).toFixed(2)}`);
+    }
+}
+
 function removerItem(index) {
     const item = contas[mesaAtual][index];
-    const resp = prompt(`Quantas unidades de ${item.nome} deseja remover?`, "1");
-    if (resp !== null && resp !== "") {
+    const resp = prompt(`Remover quantas unidades de ${item.nome}?`, "1");
+    if (resp) {
         const qtd = parseInt(resp);
-        if (isNaN(qtd) || qtd <= 0) return;
         if (qtd >= item.quantidade) { contas[mesaAtual].splice(index, 1); }
         else { item.quantidade -= qtd; }
         salvar(); atualizarResumo();
@@ -77,7 +81,7 @@ function removerItem(index) {
 }
 
 function finalizarConta() {
-    if (confirm(`Fechar conta da Mesa ${mesaAtual}?`)) { contas[mesaAtual] = []; salvar(); voltar(); }
+    if (confirm("Fechar conta?")) { contas[mesaAtual] = []; salvar(); voltar(); }
 }
 
 function voltar() {
