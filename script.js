@@ -67,29 +67,41 @@ function finalizarConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
     if (total <= 0) return;
     const forma = prompt("1-PIX, 2-Dinheiro, 3-Cartão", "1");
-    let tipo = forma === "1" ? "PIX" : forma === "2" ? "Dinheiro" : "Cartão";
+    let tipo = forma === "1" ? "PIX" : (forma === "2" ? "Dinheiro" : "Cartão");
     if (confirm(`Fechar Mesa ${mesaAtual}?`)) {
-        historicoVendas.push({ mesa: mesaAtual, total: total, hora: new Date().toLocaleTimeString(), pagamento: tipo });
+        // O ID único aqui ajuda a contar atendimentos separados se necessário
+        historicoVendas.push({ 
+            idAtendimento: Date.now(), 
+            mesa: mesaAtual, 
+            total: total, 
+            hora: new Date().toLocaleTimeString(), 
+            pagamento: tipo 
+        });
         contas[mesaAtual] = [];
         salvar(); voltar();
     }
 }
 
-// FUNÇÕES DO RELATÓRIO
 function abrirRelatorio() {
     const area = document.getElementById('area-relatorio');
     const lista = document.getElementById('lista-vendas');
+    const displayQtd = document.getElementById('qtd-mesas-atendidas');
     let soma = 0;
+    
+    // Contamos atendimentos únicos (cada vez que uma conta foi fechada)
+    displayQtd.innerText = historicoVendas.length;
+
     lista.innerHTML = historicoVendas.map(v => {
         soma += v.total;
-        return `<p>${v.hora} - M${v.mesa}: R$ ${v.total.toFixed(2)} (${v.pagamento})</p>`;
+        return `<p style="font-size:13px; border-bottom:1px solid #eee; padding:5px 0;">${v.hora} - M${v.mesa}: R$ ${v.total.toFixed(2)} (${v.pagamento})</p>`;
     }).join('');
+    
     document.getElementById('total-vendas-dia').innerText = soma.toFixed(2);
     area.style.display = 'flex';
 }
 
 function fecharRelatorio() { document.getElementById('area-relatorio').style.display = 'none'; }
 function voltar() { document.getElementById('area-pedido').style.display = 'none'; document.body.style.overflow = 'auto'; desenharMesas(); }
-function resetarRelatorio() { if(confirm("Limpar vendas do dia?")) { historicoVendas = []; salvar(); abrirRelatorio(); } }
+function resetarRelatorio() { if(confirm("Deseja zerar as vendas para começar uma nova noite?")) { historicoVendas = []; salvar(); abrirRelatorio(); } }
 
 desenharMesas();

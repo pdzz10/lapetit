@@ -15,7 +15,7 @@
 
     <img src="logo.png" class="logo-img">
     <h2>Pizzaria Lapetit</h2>
-    <button class="btn-relatorio" onclick="abrirRelatorio()">📊 Relatório do Dia</button>
+    <button class="btn-relatorio" onclick="abrirRelatorio()">📊 Relatório da Noite</button>
 
     <div id="container-mesas"></div>
 
@@ -29,31 +29,18 @@
             <h3>🍺 CERVEJAS</h3>
             <button class="btn-cerveja" onclick="adicionarItem('Litrão Brahma', 12)">Litrão Brahma (R$ 12)</button>
             <button class="btn-cerveja" onclick="adicionarItem('Litrão Skol', 12)">Litrão Skol (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Schin', 10)">Litrão Schin (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Devassa', 12)">Litrão Devassa (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Antarctica', 10)">Litrão Antarctica (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Itaipava', 12)">Litrão Itaipava (R$ 12)</button>
             <button class="btn-cerveja" onclick="adicionarItem('Heineken', 10)">Heineken (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Spaten', 10)">Spaten (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Brahma', 5)">Litrinho Brahma (R$ 5)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Skol', 5)">Litrinho Skol (R$ 5)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Devassa', 5)">Litrinho Devassa (R$ 5)</button>
 
             <h3>🍕 PIZZAS E PORÇÕES</h3>
             <button class="btn-pizza" onclick="adicionarItem('Pizza Brotinho', 12)">Pizza Brotinho (R$ 12)</button>
             <button class="btn-pizza" onclick="adicionarItem('Pizza Pequena', 15)">Pizza Pequena (R$ 15)</button>
             <button class="btn-pizza" onclick="adicionarItem('Pizza Média', 30)">Pizza Média (R$ 30)</button>
             <button class="btn-pizza" onclick="adicionarItem('Pizza Grande', 40)">Pizza Grande (R$ 40)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Pizza Gigante', 50)">Pizza Gigante (R$ 50)</button>
             <button class="btn-pizza" onclick="adicionarItem('Batata Frita', 13)">Batata Frita (R$ 13)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Camarão', 30)">Camarão (R$ 30)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Calabresa', 25)">Calabresa (R$ 25)</button>
 
             <h3>🥤 BEBIDAS</h3>
-            <button class="btn-bebida" onclick="adicionarItem('Coca Cola 1 Litro', 12)">Coca Cola 1 Litro (R$ 12)</button>
             <button class="btn-bebida" onclick="adicionarItem('Coca Cola 2 Litros', 15)">Coca Cola 2 Litros (R$ 15)</button>
             <button class="btn-bebida" onclick="adicionarItem('Coca Lata', 5)">Coca Lata (R$ 5)</button>
-            <button class="btn-bebida" onclick="adicionarItem('Guaraná Lata', 5)">Guaraná Lata (R$ 5)</button>
 
             <div class="botoes-rodape">
                 <button class="btn-dividir" onclick="dividirConta()">➗ Dividir Conta</button>
@@ -67,12 +54,17 @@
 
     <div id="area-relatorio">
         <div class="card-pedido">
-            <h2>📊 Resumo do Dia</h2>
+            <h2>📊 Resumo da Noite</h2>
             <div id="lista-vendas"></div>
-            <div id="resumo-por-tipo"></div>
+            
+            <div style="background: #f1f1f1; padding: 15px; border-radius: 15px; margin: 15px 0; text-align: center;">
+                <span style="font-size: 14px; color: #666;">Mesas atendidas hoje:</span><br>
+                <strong style="font-size: 24px; color: #e74c3c;" id="qtd-mesas-atendidas">0</strong>
+            </div>
+
             <h1 style="color:#27ae60;">Total: R$ <span id="total-vendas-dia">0.00</span></h1>
             <button class="btn-voltar" onclick="fecharRelatorio()" style="width:100%; padding:15px;">Sair</button>
-            <button onclick="resetarRelatorio()" style="width:100%; margin-top:20px; background:none; border:none; color:gray; font-size:11px;">Zerar Tudo</button>
+            <button onclick="resetarRelatorio()" style="width:100%; margin-top:20px; background:none; border:none; color:gray; font-size:11px;">Zerar para Próxima Noite</button>
         </div>
     </div>
 
