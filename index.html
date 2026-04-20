@@ -3,67 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pizzaria Lapetit - Sistema</title>
+    <title>Lapetit Sistema</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <img src="logo.png" alt="Logo Lapetit" class="logo-img">
+    <img src="logo.png" class="logo-img">
     <h2>Pizzaria Lapetit</h2>
-    
     <button class="btn-relatorio" onclick="abrirRelatorio()">📊 Relatório do Dia</button>
-    
-    <p>Selecione uma mesa abaixo</p>
 
     <div id="container-mesas"></div>
 
-    <div id="area-pedido" class="hidden">
+    <div id="area-pedido">
         <div class="card-pedido">
             <h2 id="titulo-mesa">🪑 Mesa</h2>
-            
-            <div style="text-align: left; margin-bottom: 20px;">
-                <h3>📋 Itens na Comanda:</h3>
-                <div id="lista-comanda"></div>
-                <h2 style="margin-top: 15px;">Total: R$ <span id="total-mesa">0.00</span></h2>
-            </div>
-
+            <div id="lista-comanda"></div>
+            <h2 style="margin: 15px 0;">Total: R$ <span id="total-mesa">0.00</span></h2>
             <hr>
-
             <h3>🍺 CERVEJAS</h3>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Brahma', 12)">Litrão Brahma (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Skol', 12)">Litrão Skol (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Schin', 10)">Litrão Schin (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Devassa', 12)">Litrão Devassa (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Antarctica', 10)">Litrão Antarctica (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrão Itaipava', 12)">Litrão Itaipava (R$ 12)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Heineken', 10)">Heineken (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Spaten', 10)">Spaten (R$ 10)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Brahma', 5)">Litrinho Brahma (R$ 5)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Skol', 5)">Litrinho Skol (R$ 5)</button>
-            <button class="btn-cerveja" onclick="adicionarItem('Litrinho Devassa', 5)">Litrinho Devassa (R$ 5)</button>
-
-            <h3>🍕 PIZZAS E PORÇÕES</h3>
-            <button class="btn-pizza" onclick="adicionarItem('Pizza Brotinho', 12)">Pizza Brotinho (R$ 12)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Pizza Pequena', 15)">Pizza Pequena (R$ 15)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Pizza Média', 30)">Pizza Média (R$ 30)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Pizza Grande', 40)">Pizza Grande (R$ 40)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Pizza Gigante', 50)">Pizza Gigante (R$ 50)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Batata Frita', 13)">Batata Frita (R$ 13)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Camarão', 30)">Camarão (R$ 30)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Carne de Sol', 30)">Carne de Sol (R$ 30)</button>
-            <button class="btn-pizza" onclick="adicionarItem('Calabresa', 25)">Calabresa (R$ 25)</button>
-
+            <button class="btn-cerveja" onclick="adicionarItem('Litrão Brahma', 12)">Litrão Brahma (12)</button>
+            <button class="btn-cerveja" onclick="adicionarItem('Litrão Skol', 12)">Litrão Skol (12)</button>
+            <button class="btn-cerveja" onclick="adicionarItem('Litrão Devassa', 12)">Litrão Devassa (12)</button>
+            <button class="btn-cerveja" onclick="adicionarItem('Heineken', 10)">Heineken (10)</button>
+            <button class="btn-cerveja" onclick="adicionarItem('Litrinho', 5)">Litrinho (5)</button>
+            
+            <h3>🍕 PIZZAS</h3>
+            <button class="btn-pizza" onclick="adicionarItem('Pizza Brotinho', 12)">Brotinho (12)</button>
+            <button class="btn-pizza" onclick="adicionarItem('Pizza Média', 30)">Média (30)</button>
+            <button class="btn-pizza" onclick="adicionarItem('Pizza Grande', 40)">Grande (40)</button>
+            <button class="btn-pizza" onclick="adicionarItem('Batata Frita', 13)">Batata Frita (13)</button>
+            
             <h3>🥤 BEBIDAS</h3>
-            <button class="btn-bebida" onclick="adicionarItem('Coca Cola 1 Litro', 12)">Coca Cola 1 Litro (R$ 12)</button>
-            <button class="btn-bebida" onclick="adicionarItem('Coca Cola 2 Litros', 15)">Coca Cola 2 Litros (R$ 15)</button>
-            <button class="btn-bebida" onclick="adicionarItem('Guaraná 1 Litro', 12)">Guaraná 1 Litro (R$ 12)</button>
-            <button class="btn-bebida" onclick="adicionarItem('Guaraná 2 Litros', 15)">Guaraná 2 Litros (R$ 15)</button>
-            <button class="btn-bebida" onclick="adicionarItem('Coca Lata', 5)">Coca Lata (R$ 5)</button>
-            <button class="btn-bebida" onclick="adicionarItem('Guaraná Lata', 5)">Guaraná Lata (R$ 5)</button>
+            <button class="btn-bebida" onclick="adicionarItem('Coca 2L', 15)">Coca 2L (15)</button>
+            <button class="btn-bebida" onclick="adicionarItem('Guaraná 2L', 15)">Guaraná 2L (15)</button>
+            <button class="btn-bebida" onclick="adicionarItem('Lata', 5)">Lata (5)</button>
 
             <div class="botoes-rodape">
                 <button class="btn-dividir" onclick="dividirConta()">➗ Dividir Conta</button>
-                <div style="display: flex; gap: 10px; width: 100%;">
+                <div style="display:flex; gap:10px;">
                     <button class="btn-fechar" onclick="finalizarConta()">Fechar Conta</button>
                     <button class="btn-voltar" onclick="voltar()">Voltar</button>
                 </div>
@@ -73,11 +50,12 @@
 
     <div id="area-relatorio" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; overflow-y:auto; padding-top:20px;">
         <div class="card-pedido">
-            <h2>📊 Faturamento do Dia</h2>
-            <div id="lista-vendas" style="text-align:left; margin-bottom:20px;"></div>
-            <h1 style="color:#27ae60;">Total: R$ <span id="total-vendas-dia">0.00</span></h1>
-            <button class="btn-voltar" onclick="fecharRelatorio()" style="width:100%; padding:15px; margin-top:10px;">Fechar Relatório</button>
-            <button class="btn-fechar" onclick="resetarRelatorio()" style="width:100%; padding:10px; margin-top:20px; font-size:12px; background:#666;">Zerar Relatório do Dia</button>
+            <h2>📊 Resumo do Dia</h2>
+            <div id="lista-vendas"></div>
+            <div id="resumo-por-tipo" style="background:#f0f7f4; padding:15px; border-radius:15px; margin:20px 0; text-align:left; border:1px solid #27ae60;"></div>
+            <h1 style="color:#27ae60;">Total Geral: R$ <span id="total-vendas-dia">0.00</span></h1>
+            <button class="btn-voltar" onclick="fecharRelatorio()" style="width:100%; padding:15px; margin-top:10px;">Voltar</button>
+            <button onclick="resetarRelatorio()" style="width:100%; margin-top:25px; background:none; border:none; color:gray; font-size:11px;">Zerar Dados</button>
         </div>
     </div>
 

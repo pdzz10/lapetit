@@ -1,65 +1,177 @@
+/* Configuração Geral */
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;
-    margin: 0; padding: 15px;
-    display: flex; flex-direction: column; align-items: center;
+    margin: 0;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.logo-img { height: 80px; width: auto; border-radius: 50%; margin-bottom: 10px; }
+.logo-img {
+    height: 80px;
+    width: auto;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
+/* Botão de Relatório no Topo */
 .btn-relatorio {
-    background: #2c3e50; color: white; border: none; padding: 12px 20px;
-    border-radius: 10px; font-weight: bold; margin-bottom: 15px; cursor: pointer;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* Grade de Mesas */
 #container-mesas {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 12px; width: 100%; max-width: 500px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 450px;
 }
 
 .btn-mesa {
-    aspect-ratio: 1/1; background: white; border: 2px solid #e74c3c;
-    color: #e74c3c; border-radius: 16px; font-weight: bold;
-    cursor: pointer; font-size: 13px; display: flex;
-    flex-direction: column; align-items: center; justify-content: center;
+    aspect-ratio: 1/1;
+    background: white;
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
+    border-radius: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
 }
 
 .mesa-ocupada {
-    background: #ff9800 !important; border-color: #ff9800 !important; color: white !important;
+    background: #ff9800 !important;
+    border-color: #ff9800 !important;
+    color: white !important;
 }
 
-#area-pedido {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); display: none;
-    justify-content: center; align-items: flex-start;
-    padding-top: 20px; z-index: 1000; overflow-y: auto;
+/* Modais (Área de Pedido e Relatório) */
+#area-pedido, #area-relatorio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px;
+    z-index: 1000;
+    overflow-y: auto;
 }
 
 .card-pedido {
-    background: white; padding: 20px; border-radius: 25px;
-    width: 92%; max-width: 450px; margin: 0 auto 40px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    background: white;
+    padding: 20px;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 450px;
+    margin: 0 auto 40px auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-h3 { text-align: left; margin-top: 20px; color: #333; }
+/* Estilo dos Itens na Comanda */
+.item-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
 
+/* Botões do Cardápio */
 #area-pedido button:not(.btn-fechar):not(.btn-voltar):not(.item-linha button):not(.btn-dividir) {
-    display: block; width: 100%; margin: 8px 0; padding: 16px;
-    border-radius: 12px; text-align: left; font-size: 15px;
-    font-weight: bold; cursor: pointer; border: none;
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
 }
 
 .btn-cerveja { background-color: #ebf5ff !important; color: #007bff !important; border-left: 6px solid #007bff !important; }
 .btn-pizza { background-color: #fdecea !important; color: #e74c3c !important; border-left: 6px solid #e74c3c !important; }
 .btn-bebida { background-color: #eafff0 !important; color: #27ae60 !important; border-left: 6px solid #27ae60 !important; }
 
-.item-linha { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-
-.botoes-rodape { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
-
-.btn-dividir {
-    background: #3498db; color: white; border: none; border-radius: 12px;
-    padding: 15px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 5px;
+/* Rodapé do Pedido */
+.botoes-rodape {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
 }
 
-.btn-fechar { flex: 2; background: #e74c3c; color: white; border: none; border-radius: 12px; padding: 18px; font-weight: bold; cursor: pointer; }
-.btn-voltar { flex: 1; background: #bdc3c7; color: white; border: none; border-radius: 12px; padding: 18px; cursor: pointer; }
+.btn-dividir {
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-fechar {
+    flex: 2;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-voltar {
+    flex: 1;
+    background: #bdc3c7;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+}
+
+/* Estilo Específico do Relatório */
+#resumo-por-tipo {
+    background: #f0f7f4;
+    padding: 15px;
+    border-radius: 15px;
+    margin: 20px 0;
+    text-align: left;
+    border: 1px solid #27ae60;
+}
+
+#resumo-por-tipo p {
+    margin: 5px 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#lista-vendas {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}

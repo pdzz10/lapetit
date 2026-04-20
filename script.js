@@ -99,19 +99,17 @@ function finalizarConta() {
         tipo = "Dinheiro";
     } else if (formaPagamento === "3") {
         const subTipo = prompt("Tipo de Cartão:\n1 - Débito\n2 - Crédito", "1");
-        if (subTipo === "1") tipo = "Cartão (Débito)";
-        else if (subTipo === "2") tipo = "Cartão (Crédito)";
-        else return alert("Operação cancelada: Tipo de cartão inválido.");
+        if (subTipo === "1") tipo = "Débito";
+        else if (subTipo === "2") tipo = "Crédito";
+        else return alert("Cancelado.");
     } else {
         return; 
     }
 
-    if (confirm(`Fechar Mesa ${mesaAtual} no valor de R$ ${total.toFixed(2)} (${tipo})?`)) {
+    if (confirm(`Fechar Mesa ${mesaAtual} - R$ ${total.toFixed(2)} (${tipo})?`)) {
         const agora = new Date();
         const hora = agora.getHours().toString().padStart(2, '0') + ":" + agora.getMinutes().toString().padStart(2, '0');
-        
         historicoVendas.push({ mesa: mesaAtual, total: total, hora: hora, pagamento: tipo });
-        
         contas[mesaAtual] = [];
         salvar();
         voltar();
@@ -121,21 +119,34 @@ function finalizarConta() {
 function abrirRelatorio() {
     const area = document.getElementById('area-relatorio');
     const lista = document.getElementById('lista-vendas');
+    const resumo = document.getElementById('resumo-por-tipo');
     const totalGeral = document.getElementById('total-vendas-dia');
-    let soma = 0;
+    
+    let somaTotal = 0;
+    let totais = { "PIX": 0, "Dinheiro": 0, "Débito": 0, "Crédito": 0 };
     
     lista.innerHTML = '';
     historicoVendas.forEach((venda) => {
-        soma += venda.total;
+        somaTotal += venda.total;
+        if (totais[venda.pagamento] !== undefined) {
+            totais[venda.pagamento] += venda.total;
+        }
         lista.innerHTML += `
             <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center;">
-                <span>⏰ ${venda.hora} - <strong>Mesa ${venda.mesa}</strong></span>
-                <span style="background:#eee; padding:2px 8px; border-radius:5px; font-size:10px; text-align:center;">${venda.pagamento}</span>
-                <strong style="color:#27ae60;">R$ ${venda.total.toFixed(2)}</strong>
+                <span>⏰ ${venda.hora} - M${venda.mesa}</span>
+                <span style="background:#eee; padding:2px 8px; border-radius:5px; font-size:10px;">${venda.pagamento}</span>
+                <strong>R$ ${venda.total.toFixed(2)}</strong>
             </div>`;
     });
     
-    totalGeral.innerText = soma.toFixed(2);
+    resumo.innerHTML = `
+        <p>📱 PIX: <b>R$ ${totais["PIX"].toFixed(2)}</b></p>
+        <p>💵 Dinheiro: <b>R$ ${totais["Dinheiro"].toFixed(2)}</b></p>
+        <p>💳 Débito: <b>R$ ${totais["Débito"].toFixed(2)}</b></p>
+        <p>💳 Crédito: <b>R$ ${totais["Crédito"].toFixed(2)}</b></p>
+    `;
+
+    totalGeral.innerText = somaTotal.toFixed(2);
     area.style.display = 'block';
     document.body.style.overflow = 'hidden';
 }
@@ -146,7 +157,7 @@ function fecharRelatorio() {
 }
 
 function resetarRelatorio() {
-    if (confirm("Zerar relatório do dia?")) {
+    if (confirm("Deseja zerar o relatório?")) {
         historicoVendas = []; salvar(); abrirRelatorio();
     }
 }
