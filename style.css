@@ -7,7 +7,6 @@ body {
 
 .logo-img { height: 80px; width: auto; border-radius: 50%; margin-bottom: 10px; }
 
-/* Botão de Relatório no Topo */
 .btn-relatorio {
     background: #2c3e50; color: white; border: none; padding: 10px 20px;
     border-radius: 10px; font-weight: bold; margin-bottom: 15px; cursor: pointer;
@@ -43,7 +42,6 @@ body {
 
 h3 { text-align: left; margin-top: 20px; color: #333; }
 
-/* BOTÕES DO CARDÁPIO EM LISTA */
 #area-pedido button:not(.btn-fechar):not(.btn-voltar):not(.item-linha button):not(.btn-dividir) {
     display: block; width: 100%; margin: 8px 0; padding: 16px;
     border-radius: 12px; text-align: left; font-size: 15px;

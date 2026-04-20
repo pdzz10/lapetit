@@ -1,6 +1,5 @@
 let mesaAtual = null;
 let contas = JSON.parse(localStorage.getItem('contas_lapetit')) || {};
-// Histórico de vendas do dia
 let historicoVendas = JSON.parse(localStorage.getItem('vendas_dia_lapetit')) || [];
 
 if (Object.keys(contas).length === 0) {
@@ -91,11 +90,19 @@ function finalizarConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
     if (total <= 0) return alert("Não é possível fechar uma mesa vazia.");
 
-    if (confirm(`Fechar conta da Mesa ${mesaAtual} no valor de R$ ${total.toFixed(2)}?`)) {
-        // Salva no histórico antes de limpar
+    const formaPagamento = prompt("Forma de Pagamento:\n1 - PIX\n2 - Dinheiro\n3 - Cartão (Débito/Crédito)", "1");
+    
+    let tipo = "";
+    if (formaPagamento === "1") tipo = "PIX";
+    else if (formaPagamento === "2") tipo = "Dinheiro";
+    else if (formaPagamento === "3") tipo = "Cartão";
+    else return; // Cancelado
+
+    if (confirm(`Fechar Mesa ${mesaAtual} no valor de R$ ${total.toFixed(2)} (${tipo})?`)) {
         const agora = new Date();
         const hora = agora.getHours().toString().padStart(2, '0') + ":" + agora.getMinutes().toString().padStart(2, '0');
-        historicoVendas.push({ mesa: mesaAtual, total: total, hora: hora });
+        
+        historicoVendas.push({ mesa: mesaAtual, total: total, hora: hora, pagamento: tipo });
         
         contas[mesaAtual] = [];
         salvar();
@@ -103,7 +110,6 @@ function finalizarConta() {
     }
 }
 
-// LÓGICA DO RELATÓRIO
 function abrirRelatorio() {
     const area = document.getElementById('area-relatorio');
     const lista = document.getElementById('lista-vendas');
@@ -113,7 +119,12 @@ function abrirRelatorio() {
     lista.innerHTML = '';
     historicoVendas.forEach((venda) => {
         soma += venda.total;
-        lista.innerHTML += `<p style="border-bottom:1px solid #eee; padding:5px 0;">⏰ ${venda.hora} - <strong>Mesa ${venda.mesa}</strong>: R$ ${venda.total.toFixed(2)}</p>`;
+        lista.innerHTML += `
+            <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center;">
+                <span>⏰ ${venda.hora} - <strong>Mesa ${venda.mesa}</strong></span>
+                <span style="background:#eee; padding:2px 8px; border-radius:5px; font-size:11px;">${venda.pagamento}</span>
+                <strong style="color:#27ae60;">R$ ${venda.total.toFixed(2)}</strong>
+            </div>`;
     });
     
     totalGeral.innerText = soma.toFixed(2);
@@ -127,10 +138,8 @@ function fecharRelatorio() {
 }
 
 function resetarRelatorio() {
-    if (confirm("Deseja ZERAR o relatório do dia? Faça isso apenas no fim do expediente.")) {
-        historicoVendas = [];
-        salvar();
-        abrirRelatorio();
+    if (confirm("Zerar relatório do dia?")) {
+        historicoVendas = []; salvar(); abrirRelatorio();
     }
 }
 
