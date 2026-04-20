@@ -1,7 +1,7 @@
 let mesaAtual = null;
 let contas = JSON.parse(localStorage.getItem('contas_lapetit')) || {};
 let historicoVendas = JSON.parse(localStorage.getItem('vendas_dia_lapetit')) || [];
-let pendentes = JSON.parse(localStorage.getItem('pendentes_lapetit')) || []; // NOVA LISTA
+let pendentes = JSON.parse(localStorage.getItem('pendentes_lapetit')) || [];
 
 if (Object.keys(contas).length === 0) {
     for (let i = 1; i <= 20; i++) { contas[i] = []; }
@@ -10,7 +10,7 @@ if (Object.keys(contas).length === 0) {
 function salvar() { 
     localStorage.setItem('contas_lapetit', JSON.stringify(contas)); 
     localStorage.setItem('vendas_dia_lapetit', JSON.stringify(historicoVendas));
-    localStorage.setItem('pendentes_lapetit', JSON.stringify(pendentes)); // SALVA PENDENTES
+    localStorage.setItem('pendentes_lapetit', JSON.stringify(pendentes));
 }
 
 function desenharMesas() {
@@ -25,7 +25,7 @@ function desenharMesas() {
         btn.onclick = () => abrirMesa(i);
         container.appendChild(btn);
     }
-    atualizarAlertas(); // ATUALIZA A TELA INICIAL
+    atualizarAlertas();
 }
 
 function abrirMesa(num) {
@@ -42,38 +42,12 @@ function adicionarItem(nome, preco) {
         if (itemExistente) { itemExistente.quantidade += 1; }
         else { contas[mesaAtual].push({ nome, preco, quantidade: 1 }); }
         
-        // LOGICA DE COZINHA: Verifica se é comida
-        const itensCozinha = ['Pizza', 'Batata', 'Camarão', 'Calabresa', 'Brotinho', 'Porção'];
+        const itensCozinha = ['Pizza', 'Batata', 'Brotinho', 'Porção', 'Calabresa'];
         if (itensCozinha.some(palavra => nome.includes(palavra))) {
             const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             pendentes.push({ mesa: mesaAtual, item: nome, hora: hora });
         }
-
         atualizarResumo(); salvar(); atualizarAlertas();
-    }
-}
-
-function atualizarAlertas() {
-    const secao = document.getElementById('secao-pendentes');
-    const lista = document.getElementById('lista-pendentes');
-    if (pendentes.length === 0) { secao.style.display = 'none'; return; }
-    
-    secao.style.display = 'block';
-    lista.innerHTML = '';
-    pendentes.forEach((p, index) => {
-        lista.innerHTML += `
-            <div class="card-alerta-comida" onclick="confirmarEntrega(${index})">
-                <span><strong>Mesa ${p.mesa}</strong>: ${p.item}</span>
-                <small>${p.hora} - Toque para OK ✅</small>
-            </div>`;
-    });
-}
-
-function confirmarEntrega(index) {
-    if (confirm("Este item já foi entregue à mesa?")) {
-        pendentes.splice(index, 1);
-        salvar();
-        atualizarAlertas();
     }
 }
 
@@ -91,51 +65,71 @@ function atualizarResumo() {
     document.getElementById('total-mesa').innerText = total.toFixed(2);
 }
 
-function removerItem(index) {
-    const item = contas[mesaAtual][index];
-    if (item.quantidade > 1) item.quantidade--;
-    else contas[mesaAtual].splice(index, 1);
-    salvar(); atualizarResumo();
-}
-
-function finalizarConta() {
-    const total = parseFloat(document.getElementById('total-mesa').innerText);
-    if (total <= 0) return;
-    const forma = prompt("1-PIX, 2-Dinheiro, 3-Cartão", "1");
-    let tipo = forma === "1" ? "PIX" : (forma === "2" ? "Dinheiro" : "Cartão");
-    if (confirm(`Fechar Mesa ${mesaAtual}?`)) {
-        historicoVendas.push({ mesa: mesaAtual, total: total, hora: new Date().toLocaleTimeString(), pagamento: tipo });
-        contas[mesaAtual] = [];
-        salvar(); voltar();
-    }
-}
-
+// ==========================================
+// FUNÇÃO: DIVIDIR CONTA (CORRIGIDA)
+// ==========================================
 function dividirConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
-    
-    if (total <= 0) {
-        alert("A comanda está vazia!");
-        return;
-    }
+    if (total <= 0) return alert("A comanda está vazia!");
 
     const pessoas = prompt("Dividir por quantas pessoas?", "2");
     
-    // Valida se o usuário digitou um número válido
     if (pessoas !== null && pessoas > 0) {
-        const valorPorPessoa = total / pessoas;
-        alert(`Total da Mesa: R$ ${total.toFixed(2)}\nDividido por ${pessoas} pessoas\n\nValor por Pessoa: R$ ${valorPorPessoa.toFixed(2)}`);
+        const valorCada = total / pessoas;
+        alert(`📊 DIVISÃO DA CONTA\n--------------------------\nTotal da Mesa: R$ ${total.toFixed(2)}\nPessoas: ${pessoas}\n\nVALOR POR PESSOA: R$ ${valorCada.toFixed(2)}`);
     }
 }
 
+// ==========================================
+// FUNÇÃO: FINALIZAR COM CÁLCULO DE TROCO
+// ==========================================
+function finalizarConta() {
+    const total = parseFloat(document.getElementById('total-mesa').innerText);
+    if (total <= 0) return;
+
+    const forma = prompt("1-PIX, 2-Dinheiro, 3-Cartão", "1");
+    let tipo = "";
+
+    if (forma === "2") {
+        tipo = "Dinheiro";
+        const valorPago = prompt(`Total: R$ ${total.toFixed(2)}\nQuanto o cliente deu em dinheiro?`, total);
+        
+        if (valorPago !== null) {
+            const pago = parseFloat(valorPago);
+            if (pago < total) return alert("Valor insuficiente! A conta não foi fechada.");
+            
+            const troco = pago - total;
+            alert(`✅ CONTA FECHADA!\n--------------------------\nTotal: R$ ${total.toFixed(2)}\nRecebido: R$ ${pago.toFixed(2)}\n\n💰 TROCO: R$ ${troco.toFixed(2)}`);
+        } else return;
+    } else {
+        tipo = forma === "1" ? "PIX" : "Cartão";
+        if (!confirm(`Fechar no ${tipo}?`)) return;
+    }
+
+    historicoVendas.push({ mesa: mesaAtual, total: total, hora: new Date().toLocaleTimeString(), pagamento: tipo });
+    contas[mesaAtual] = [];
+    salvar(); voltar();
+}
+
+function atualizarAlertas() {
+    const secao = document.getElementById('secao-pendentes');
+    const lista = document.getElementById('lista-pendentes');
+    if (pendentes.length === 0) { secao.style.display = 'none'; return; }
+    secao.style.display = 'block';
+    lista.innerHTML = pendentes.map((p, i) => `
+        <div class="card-alerta-comida" onclick="entregue(${i})">
+            <strong>Mesa ${p.mesa}</strong>: ${p.item} <br><small>${p.hora} - OK?</small>
+        </div>`).join('');
+}
+
+function entregue(i) { if(confirm("Entregue?")) { pendentes.splice(i, 1); salvar(); atualizarAlertas(); } }
 function abrirRelatorio() {
     const area = document.getElementById('area-relatorio');
-    const lista = document.getElementById('lista-vendas');
-    const displayQtd = document.getElementById('qtd-mesas-atendidas');
     let soma = 0;
-    displayQtd.innerText = historicoVendas.length;
-    lista.innerHTML = historicoVendas.map(v => {
+    document.getElementById('qtd-mesas-atendidas').innerText = historicoVendas.length;
+    document.getElementById('lista-vendas').innerHTML = historicoVendas.map(v => {
         soma += v.total;
-        return `<p style="font-size:13px; border-bottom:1px solid #eee; padding:5px 0;">${v.hora} - M${v.mesa}: R$ ${v.total.toFixed(2)} (${v.pagamento})</p>`;
+        return `<p>${v.hora} - M${v.mesa}: R$ ${v.total.toFixed(2)} (${v.pagamento})</p>`;
     }).join('');
     document.getElementById('total-vendas-dia').innerText = soma.toFixed(2);
     area.style.display = 'flex';
@@ -143,6 +137,6 @@ function abrirRelatorio() {
 
 function fecharRelatorio() { document.getElementById('area-relatorio').style.display = 'none'; }
 function voltar() { document.getElementById('area-pedido').style.display = 'none'; document.body.style.overflow = 'auto'; desenharMesas(); }
-function resetarRelatorio() { if(confirm("Zerar tudo?")) { historicoVendas = []; pendentes = []; salvar(); abrirRelatorio(); } }
+function resetarRelatorio() { if(confirm("Zerar noite?")) { historicoVendas = []; pendentes = []; salvar(); abrirRelatorio(); } }
 
 desenharMesas();
