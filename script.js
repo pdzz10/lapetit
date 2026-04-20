@@ -110,6 +110,23 @@ function finalizarConta() {
     }
 }
 
+function dividirConta() {
+    const total = parseFloat(document.getElementById('total-mesa').innerText);
+    
+    if (total <= 0) {
+        alert("A comanda está vazia!");
+        return;
+    }
+
+    const pessoas = prompt("Dividir por quantas pessoas?", "2");
+    
+    // Valida se o usuário digitou um número válido
+    if (pessoas !== null && pessoas > 0) {
+        const valorPorPessoa = total / pessoas;
+        alert(`Total da Mesa: R$ ${total.toFixed(2)}\nDividido por ${pessoas} pessoas\n\nValor por Pessoa: R$ ${valorPorPessoa.toFixed(2)}`);
+    }
+}
+
 function abrirRelatorio() {
     const area = document.getElementById('area-relatorio');
     const lista = document.getElementById('lista-vendas');
