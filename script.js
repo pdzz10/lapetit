@@ -1,11 +1,16 @@
 let mesaAtual = null;
 let contas = JSON.parse(localStorage.getItem('contas_lapetit')) || {};
+// Histórico de vendas do dia
+let historicoVendas = JSON.parse(localStorage.getItem('vendas_dia_lapetit')) || [];
 
 if (Object.keys(contas).length === 0) {
     for (let i = 1; i <= 20; i++) { contas[i] = []; }
 }
 
-function salvar() { localStorage.setItem('contas_lapetit', JSON.stringify(contas)); }
+function salvar() { 
+    localStorage.setItem('contas_lapetit', JSON.stringify(contas)); 
+    localStorage.setItem('vendas_dia_lapetit', JSON.stringify(historicoVendas));
+}
 
 function desenharMesas() {
     const container = document.getElementById('container-mesas');
@@ -62,11 +67,13 @@ function atualizarResumo() {
 function dividirConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
     if (total <= 0) return alert("Comanda vazia!");
-    const pessoas = prompt("Dividir em quantas pessoas?", "2");
-    if (pessoas) {
-        const n = parseInt(pessoas);
-        if (n > 0) alert(`Total: R$ ${total.toFixed(2)}\nCada um paga: R$ ${(total/n).toFixed(2)}`);
-    }
+    setTimeout(() => {
+        const pessoas = prompt("Dividir em quantas pessoas?", "2");
+        if (pessoas) {
+            const n = parseInt(pessoas);
+            if (n > 0) alert(`Total: R$ ${total.toFixed(2)}\nCada um paga: R$ ${(total/n).toFixed(2)}`);
+        }
+    }, 100);
 }
 
 function removerItem(index) {
@@ -81,7 +88,50 @@ function removerItem(index) {
 }
 
 function finalizarConta() {
-    if (confirm("Fechar conta?")) { contas[mesaAtual] = []; salvar(); voltar(); }
+    const total = parseFloat(document.getElementById('total-mesa').innerText);
+    if (total <= 0) return alert("Não é possível fechar uma mesa vazia.");
+
+    if (confirm(`Fechar conta da Mesa ${mesaAtual} no valor de R$ ${total.toFixed(2)}?`)) {
+        // Salva no histórico antes de limpar
+        const agora = new Date();
+        const hora = agora.getHours().toString().padStart(2, '0') + ":" + agora.getMinutes().toString().padStart(2, '0');
+        historicoVendas.push({ mesa: mesaAtual, total: total, hora: hora });
+        
+        contas[mesaAtual] = [];
+        salvar();
+        voltar();
+    }
+}
+
+// LÓGICA DO RELATÓRIO
+function abrirRelatorio() {
+    const area = document.getElementById('area-relatorio');
+    const lista = document.getElementById('lista-vendas');
+    const totalGeral = document.getElementById('total-vendas-dia');
+    let soma = 0;
+    
+    lista.innerHTML = '';
+    historicoVendas.forEach((venda) => {
+        soma += venda.total;
+        lista.innerHTML += `<p style="border-bottom:1px solid #eee; padding:5px 0;">⏰ ${venda.hora} - <strong>Mesa ${venda.mesa}</strong>: R$ ${venda.total.toFixed(2)}</p>`;
+    });
+    
+    totalGeral.innerText = soma.toFixed(2);
+    area.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function fecharRelatorio() {
+    document.getElementById('area-relatorio').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+function resetarRelatorio() {
+    if (confirm("Deseja ZERAR o relatório do dia? Faça isso apenas no fim do expediente.")) {
+        historicoVendas = [];
+        salvar();
+        abrirRelatorio();
+    }
 }
 
 function voltar() {

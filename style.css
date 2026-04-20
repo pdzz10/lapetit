@@ -7,6 +7,12 @@ body {
 
 .logo-img { height: 80px; width: auto; border-radius: 50%; margin-bottom: 10px; }
 
+/* Botão de Relatório no Topo */
+.btn-relatorio {
+    background: #2c3e50; color: white; border: none; padding: 10px 20px;
+    border-radius: 10px; font-weight: bold; margin-bottom: 15px; cursor: pointer;
+}
+
 #container-mesas {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 12px; width: 100%; max-width: 500px;
@@ -32,7 +38,7 @@ body {
 
 .card-pedido {
     background: white; padding: 20px; border-radius: 25px;
-    width: 90%; max-width: 450px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 90%; max-width: 450px; margin: 0 auto 40px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 h3 { text-align: left; margin-top: 20px; color: #333; }
@@ -44,14 +50,12 @@ h3 { text-align: left; margin-top: 20px; color: #333; }
     font-weight: bold; cursor: pointer; border: none;
 }
 
-/* CORES DAS CATEGORIAS */
 .btn-cerveja { background-color: #ebf5ff !important; color: #007bff !important; border-left: 6px solid #007bff !important; }
 .btn-pizza { background-color: #fdecea !important; color: #e74c3c !important; border-left: 6px solid #e74c3c !important; }
 .btn-bebida { background-color: #eafff0 !important; color: #27ae60 !important; border-left: 6px solid #27ae60 !important; }
 
 .item-linha { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
 
-/* RODAPÉ */
 .botoes-rodape { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
 
 .btn-dividir {
