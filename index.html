@@ -62,7 +62,19 @@
                     <button class="btn-voltar" onclick="voltar()" style="flex:1;">Voltar</button>
                 </div>
             </div>
-        </div> </div>
+        </div>
+    </div>
+
+    <div id="area-relatorio">
+        <div class="card-pedido">
+            <h2>📊 Resumo do Dia</h2>
+            <div id="lista-vendas"></div>
+            <div id="resumo-por-tipo"></div>
+            <h1 style="color:#27ae60;">Total: R$ <span id="total-vendas-dia">0.00</span></h1>
+            <button class="btn-voltar" onclick="fecharRelatorio()" style="width:100%; padding:15px;">Sair</button>
+            <button onclick="resetarRelatorio()" style="width:100%; margin-top:20px; background:none; border:none; color:gray; font-size:11px;">Zerar Tudo</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

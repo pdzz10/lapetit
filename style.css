@@ -2,18 +2,14 @@ body {
     font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa;
     margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center;
 }
-.logo-img { height: 80px; border-radius: 50%; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+.logo-img { height: 80px; border-radius: 50%; margin-bottom: 10px; }
 .btn-relatorio { background: #2c3e50; color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: bold; margin-bottom: 20px; cursor: pointer; }
 
 #container-mesas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: 100%; max-width: 450px; }
-.btn-mesa { aspect-ratio: 1/1; background: white; border: 2px solid #e74c3c; color: #e74c3c; border-radius: 16px; font-weight: bold; cursor: pointer; line-height: 1.2; }
+.btn-mesa { aspect-ratio: 1/1; background: white; border: 2px solid #e74c3c; color: #e74c3c; border-radius: 16px; font-weight: bold; cursor: pointer; }
 .mesa-ocupada { background: #ff9800 !important; border-color: #ff9800 !important; color: white !important; }
 
-/* Alertas de Cozinha */
-.card-alerta-comida { background: #fff3cd; border-left: 6px solid #ffc107; padding: 12px; margin-bottom: 10px; border-radius: 12px; text-align: left; animation: pulse 1.5s infinite; cursor: pointer; }
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-
-/* Modais - CORRIGIDO PARA NÃO CORTAR O FUNDO BRANCO */
+/* ESTILO DOS MODAIS - CORREÇÃO DO FUNDO BRANCO */
 #area-pedido, #area-relatorio { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(0,0,0,0.85); display: none; justify-content: center; 
@@ -25,7 +21,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* Cores dos Botões do Menu */
+/* BOTÕES DO CARDÁPIO */
 #area-pedido button:not(.btn-fechar):not(.btn-voltar):not(.btn-dividir):not(.item-linha button) {
     display: block; width: 100%; margin: 8px 0; padding: 16px; border-radius: 12px; text-align: left; font-weight: bold; border: none; cursor: pointer;
 }
@@ -33,6 +29,7 @@ body {
 .btn-pizza { background-color: #fdecea !important; color: #e74c3c !important; border-left: 6px solid #e74c3c !important; }
 .btn-bebida { background-color: #eafff0 !important; color: #27ae60 !important; border-left: 6px solid #27ae60 !important; }
 
+/* RODAPÉ E AUXILIARES */
 .item-linha { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
 .botoes-rodape { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; padding-bottom: 20px; }
 .btn-dividir { background: #3498db; color: white; border: none; border-radius: 12px; padding: 15px; font-weight: bold; }
