@@ -30,6 +30,11 @@
             <div id="lista-comanda"></div>
             <h2 style="margin: 15px 0;">Total: R$ <span id="total-mesa">0.00</span></h2>
             <hr>
+
+            <h3>📝 ADICIONAR FORA DO CARDÁPIO</h3>
+            <button onclick="adicionarItemAvulso()" style="background: #9b59b6 !important; color: white !important; border-left: 6px solid #8e44ad !important; width: 100%; padding: 16px; border-radius: 12px; font-weight: bold; border: none; margin-bottom: 15px; cursor: pointer;">
+                + Novo Item Personalizado
+            </button>
             
             <h3>🍺 CERVEJAS</h3>
             <button class="btn-cerveja" onclick="adicionarItem('Litrão Brahma', 12)">Litrão Brahma (R$ 12)</button>
@@ -66,7 +71,8 @@
                     <button class="btn-voltar" onclick="voltar()" style="flex:1;">Voltar</button>
                 </div>
             </div>
-        </div> </div>
+        </div> 
+    </div>
 
     <div id="area-relatorio">
         <div class="card-pedido">
