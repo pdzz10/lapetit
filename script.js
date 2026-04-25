@@ -3,7 +3,6 @@ let contas = JSON.parse(localStorage.getItem('contas_lapetit')) || {};
 let historicoVendas = JSON.parse(localStorage.getItem('vendas_dia_lapetit')) || [];
 let pendentes = JSON.parse(localStorage.getItem('pendentes_lapetit')) || [];
 
-// Inicializa as mesas se estiver vazio
 if (Object.keys(contas).length === 0) {
     for (let i = 1; i <= 20; i++) { contas[i] = []; }
 }
@@ -52,14 +51,17 @@ function adicionarItem(nome, preco) {
     }
 }
 
+// ESTA É A FUNÇÃO QUE O SEU BOTÃO ROXO CHAMA
 function adicionarItemAvulso() {
     if (mesaAtual === null) return;
-    const nome = prompt("Nome do item (Ex: Pitu, Cigarro):");
+    const nome = prompt("Nome do item:");
     if (!nome) return;
     const precoInput = prompt(`Valor de "${nome}":`, "0.00");
     const preco = parseFloat(precoInput.replace(',', '.'));
-    if (isNaN(preco) || preco < 0) { alert("Valor inválido!"); return; }
-
+    if (isNaN(preco) || preco < 0) {
+        alert("Valor inválido!");
+        return;
+    }
     contas[mesaAtual].push({ nome: nome + " (Avulso)", preco: preco, quantidade: 1 });
     atualizarResumo(); salvar(); atualizarAlertas();
 }
@@ -75,27 +77,14 @@ function atualizarResumo() {
     const lista = document.getElementById('lista-comanda');
     let total = 0;
     lista.innerHTML = '';
-    
     contas[mesaAtual].forEach((item, index) => {
-        const subtotalItem = item.preco * item.quantidade;
-        total += subtotalItem;
-        lista.innerHTML += `
-            <div class="item-linha" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-                <div style="flex: 1;">
-                    <strong>${item.quantidade}x</strong> ${item.nome}
-                    <span style="color: #27ae60; font-weight: bold; margin-left: 8px;">R$ ${subtotalItem.toFixed(2)}</span>
-                </div>
-                <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:35px; height:35px;">X</button>
-            </div>`;
+        const sub = item.preco * item.quantidade;
+        total += sub;
+        lista.innerHTML += `<div class="item-linha">
+            <span><strong>${item.quantidade}x</strong> ${item.nome}</span>
+            <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:30px; height:30px; font-weight:bold;">X</button></div>`;
     });
     document.getElementById('total-mesa').innerText = total.toFixed(2);
-}
-
-function dividirConta() {
-    const total = parseFloat(document.getElementById('total-mesa').innerText);
-    if (total <= 0) return;
-    const pessoas = prompt("Dividir por quantas pessoas?", "2");
-    if (pessoas > 0) alert(`Total: R$ ${total.toFixed(2)}\nCada um: R$ ${(total/pessoas).toFixed(2)}`);
 }
 
 function finalizarConta() {
@@ -122,19 +111,7 @@ function finalizarConta() {
     salvar(); voltar();
 }
 
-function atualizarAlertas() {
-    const secao = document.getElementById('secao-pendentes');
-    const lista = document.getElementById('lista-pendentes');
-    if (!secao || !lista) return;
-    if (pendentes.length === 0) { secao.style.display = 'none'; return; }
-    secao.style.display = 'block';
-    lista.innerHTML = pendentes.map((p, i) => `
-        <div class="card-alerta-comida" onclick="entregue(${i})">
-            <strong>Mesa ${p.mesa}</strong>: ${p.item} <br><small>${p.hora} - OK?</small>
-        </div>`).join('');
-}
-
-function entregue(i) { if(confirm("Entregue?")) { pendentes.splice(i, 1); salvar(); atualizarAlertas(); } }
+function voltar() { document.getElementById('area-pedido').style.display = 'none'; document.body.style.overflow = 'auto'; desenharMesas(); }
 function abrirRelatorio() { document.getElementById('area-relatorio').style.display = 'flex'; atualizarRelatorio(); }
 function atualizarRelatorio() {
     let soma = 0;
@@ -146,9 +123,20 @@ function atualizarRelatorio() {
     document.getElementById('total-vendas-dia').innerText = soma.toFixed(2);
 }
 function fecharRelatorio() { document.getElementById('area-relatorio').style.display = 'none'; }
-function voltar() { document.getElementById('area-pedido').style.display = 'none'; document.body.style.overflow = 'auto'; desenharMesas(); }
 function resetarRelatorio() { if(confirm("Zerar noite?")) { historicoVendas = []; pendentes = []; salvar(); fecharRelatorio(); desenharMesas(); } }
+function dividirConta() {
+    const total = parseFloat(document.getElementById('total-mesa').innerText);
+    if (total <= 0) return alert("Comanda vazia!");
+    const p = prompt("Dividir por quantos?", "2");
+    if (p > 0) alert(`Total: R$ ${total.toFixed(2)}\nCada um: R$ ${(total/p).toFixed(2)}`);
+}
+function atualizarAlertas() {
+    const secao = document.getElementById('secao-pendentes');
+    const lista = document.getElementById('lista-pendentes');
+    if (pendentes.length === 0) { secao.style.display = 'none'; return; }
+    secao.style.display = 'block';
+    lista.innerHTML = pendentes.map((p, i) => `<div class="card-alerta-comida" onclick="entregue(${i})"><strong>Mesa ${p.mesa}</strong>: ${p.item} <br><small>${p.hora}</small></div>`).join('');
+}
+function entregue(i) { if(confirm("Entregue?")) { pendentes.splice(i, 1); salvar(); atualizarAlertas(); } }
 
-// Força o carregamento inicial
-window.onload = desenharMesas;
 desenharMesas();
