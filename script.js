@@ -51,17 +51,13 @@ function adicionarItem(nome, preco) {
     }
 }
 
-// ESTA É A FUNÇÃO QUE O SEU BOTÃO ROXO CHAMA
 function adicionarItemAvulso() {
     if (mesaAtual === null) return;
     const nome = prompt("Nome do item:");
     if (!nome) return;
     const precoInput = prompt(`Valor de "${nome}":`, "0.00");
     const preco = parseFloat(precoInput.replace(',', '.'));
-    if (isNaN(preco) || preco < 0) {
-        alert("Valor inválido!");
-        return;
-    }
+    if (isNaN(preco) || preco < 0) { alert("Valor inválido!"); return; }
     contas[mesaAtual].push({ nome: nome + " (Avulso)", preco: preco, quantidade: 1 });
     atualizarResumo(); salvar(); atualizarAlertas();
 }
@@ -73,16 +69,25 @@ function removerItem(index) {
     }
 }
 
+// FUNÇÃO COM A ALTERAÇÃO DO VALOR AO LADO
 function atualizarResumo() {
     const lista = document.getElementById('lista-comanda');
     let total = 0;
     lista.innerHTML = '';
+    
     contas[mesaAtual].forEach((item, index) => {
         const sub = item.preco * item.quantidade;
         total += sub;
-        lista.innerHTML += `<div class="item-linha">
-            <span><strong>${item.quantidade}x</strong> ${item.nome}</span>
-            <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:30px; height:30px; font-weight:bold;">X</button></div>`;
+        
+        // Criando a linha com o nome e o valor somado
+        lista.innerHTML += `
+            <div class="item-linha" style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #eee;">
+                <span style="flex: 1; text-align: left;">
+                    <strong>${item.quantidade}x</strong> ${item.nome} 
+                    <span style="color: #27ae60; font-weight: bold; margin-left: 5px;">R$ ${sub.toFixed(2)}</span>
+                </span>
+                <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:30px; height:30px; font-weight:bold; margin-left: 10px;">X</button>
+            </div>`;
     });
     document.getElementById('total-mesa').innerText = total.toFixed(2);
 }
@@ -95,11 +100,11 @@ function finalizarConta() {
 
     if (forma === "2") {
         tipo = "Dinheiro";
-        const valorPago = prompt(`Total: R$ ${total.toFixed(2)}\nDinheiro recebido:`, total);
+        const valorPago = prompt(`Total: R$ ${total.toFixed(2)}\nRecebido:`, total);
         if (valorPago !== null) {
             const pago = parseFloat(valorPago.replace(',', '.'));
             if (pago < total) return alert("Valor insuficiente!");
-            alert(`✅ FECHADO!\nTroco: R$ ${(pago - total).toFixed(2)}`);
+            alert(`✅ FECHADO! Troco: R$ ${(pago - total).toFixed(2)}`);
         } else return;
     } else {
         tipo = forma === "1" ? "PIX" : "Cartão";
@@ -126,16 +131,16 @@ function fecharRelatorio() { document.getElementById('area-relatorio').style.dis
 function resetarRelatorio() { if(confirm("Zerar noite?")) { historicoVendas = []; pendentes = []; salvar(); fecharRelatorio(); desenharMesas(); } }
 function dividirConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
-    if (total <= 0) return alert("Comanda vazia!");
+    if (total <= 0) return alert("Vazia!");
     const p = prompt("Dividir por quantos?", "2");
-    if (p > 0) alert(`Total: R$ ${total.toFixed(2)}\nCada um: R$ ${(total/p).toFixed(2)}`);
+    if (p > 0) alert(`Cada um: R$ ${(total/p).toFixed(2)}`);
 }
 function atualizarAlertas() {
     const secao = document.getElementById('secao-pendentes');
     const lista = document.getElementById('lista-pendentes');
     if (pendentes.length === 0) { secao.style.display = 'none'; return; }
     secao.style.display = 'block';
-    lista.innerHTML = pendentes.map((p, i) => `<div class="card-alerta-comida" onclick="entregue(${i})"><strong>Mesa ${p.mesa}</strong>: ${p.item} <br><small>${p.hora}</small></div>`).join('');
+    lista.innerHTML = pendentes.map((p, i) => `<div class="card-alerta-comida" onclick="entregue(${i})"><strong>Mesa ${p.mesa}</strong>: ${p.item}</div>`).join('');
 }
 function entregue(i) { if(confirm("Entregue?")) { pendentes.splice(i, 1); salvar(); atualizarAlertas(); } }
 
