@@ -36,6 +36,7 @@ function abrirMesa(num) {
     atualizarResumo();
 }
 
+// FUNÇÃO PARA ITENS DO CARDÁPIO FIXO
 function adicionarItem(nome, preco) {
     if (mesaAtual !== null) {
         const itemExistente = contas[mesaAtual].find(i => i.nome === nome);
@@ -51,6 +52,46 @@ function adicionarItem(nome, preco) {
     }
 }
 
+// ==========================================
+// NOVIDADE: FUNÇÃO PARA ITEM AVULSO (FORA DO CARDÁPIO)
+// ==========================================
+function adicionarItemAvulso() {
+    if (mesaAtual === null) return;
+
+    const nome = prompt("Nome do item (Ex: Dose de Pitu, Cigarro):");
+    if (!nome) return;
+
+    const precoInput = prompt(`Valor de "${nome}":`, "0.00");
+    const preco = parseFloat(precoInput.replace(',', '.')); // Aceita vírgula ou ponto
+
+    if (isNaN(preco) || preco < 0) {
+        alert("Valor inválido!");
+        return;
+    }
+
+    contas[mesaAtual].push({ 
+        nome: nome + " (Avulso)", 
+        preco: preco, 
+        quantidade: 1 
+    });
+
+    // Se for algo de comer, manda pra cozinha também
+    const itensCozinha = ['Pizza', 'Batata', 'Brotinho', 'Porção', 'Calabresa', 'Pastel'];
+    if (itensCozinha.some(palavra => nome.toLowerCase().includes(palavra.toLowerCase()))) {
+        const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        pendentes.push({ mesa: mesaAtual, item: nome, hora: hora });
+    }
+
+    atualizarResumo(); salvar(); atualizarAlertas();
+}
+
+function removerItem(index) {
+    if (mesaAtual !== null) {
+        contas[mesaAtual].splice(index, 1);
+        atualizarResumo(); salvar(); desenharMesas();
+    }
+}
+
 function atualizarResumo() {
     const lista = document.getElementById('lista-comanda');
     let total = 0;
@@ -60,29 +101,21 @@ function atualizarResumo() {
         total += sub;
         lista.innerHTML += `<div class="item-linha">
             <span><strong>${item.quantidade}x</strong> ${item.nome}</span>
-            <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:30px; height:30px;">X</button></div>`;
+            <button onclick="removerItem(${index})" style="background:#ff4444; color:white; border:none; border-radius:8px; width:30px; height:30px; font-weight:bold;">X</button></div>`;
     });
     document.getElementById('total-mesa').innerText = total.toFixed(2);
 }
 
-// ==========================================
-// FUNÇÃO: DIVIDIR CONTA (CORRIGIDA)
-// ==========================================
 function dividirConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
     if (total <= 0) return alert("A comanda está vazia!");
-
     const pessoas = prompt("Dividir por quantas pessoas?", "2");
-    
     if (pessoas !== null && pessoas > 0) {
         const valorCada = total / pessoas;
-        alert(`📊 DIVISÃO DA CONTA\n--------------------------\nTotal da Mesa: R$ ${total.toFixed(2)}\nPessoas: ${pessoas}\n\nVALOR POR PESSOA: R$ ${valorCada.toFixed(2)}`);
+        alert(`📊 DIVISÃO DA CONTA\n--------------------------\nTotal: R$ ${total.toFixed(2)}\n${pessoas} pessoas\n\nVALOR POR PESSOA: R$ ${valorCada.toFixed(2)}`);
     }
 }
 
-// ==========================================
-// FUNÇÃO: FINALIZAR COM CÁLCULO DE TROCO
-// ==========================================
 function finalizarConta() {
     const total = parseFloat(document.getElementById('total-mesa').innerText);
     if (total <= 0) return;
@@ -92,14 +125,12 @@ function finalizarConta() {
 
     if (forma === "2") {
         tipo = "Dinheiro";
-        const valorPago = prompt(`Total: R$ ${total.toFixed(2)}\nQuanto o cliente deu em dinheiro?`, total);
-        
+        const valorPago = prompt(`Total: R$ ${total.toFixed(2)}\nDinheiro recebido:`, total);
         if (valorPago !== null) {
-            const pago = parseFloat(valorPago);
-            if (pago < total) return alert("Valor insuficiente! A conta não foi fechada.");
-            
+            const pago = parseFloat(valorPago.replace(',', '.'));
+            if (pago < total) return alert("Valor insuficiente!");
             const troco = pago - total;
-            alert(`✅ CONTA FECHADA!\n--------------------------\nTotal: R$ ${total.toFixed(2)}\nRecebido: R$ ${pago.toFixed(2)}\n\n💰 TROCO: R$ ${troco.toFixed(2)}`);
+            alert(`✅ FECHADO!\nTroco: R$ ${troco.toFixed(2)}`);
         } else return;
     } else {
         tipo = forma === "1" ? "PIX" : "Cartão";
@@ -123,6 +154,7 @@ function atualizarAlertas() {
 }
 
 function entregue(i) { if(confirm("Entregue?")) { pendentes.splice(i, 1); salvar(); atualizarAlertas(); } }
+
 function abrirRelatorio() {
     const area = document.getElementById('area-relatorio');
     let soma = 0;
